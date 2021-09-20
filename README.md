@@ -1,4 +1,26 @@
-This is a template to get you started setting up a cluster.
+This is a template to get you started setting up a cluster in radiant at NCSA
+
+# Git Setup
+
+To get started, clone this repository, rename the remote, and attach to a new origin. This will allow you to pull in the latest changes from GitHub, and push them to your own private repository.
+
+```bash
+git clone git@github.com:ncsa/radiant-cluster-template.git <clustername>
+cd <clustername>
+git remote rename origin template
+git remote set-url --push template no_push
+git remote add origin git@git.example.com:clustername.git
+git push -u origin --all
+git push -u origin --tags
+```
+
+To update from template repository
+
+```bash
+git fetch template
+git merge template/main
+git push
+```
 
 # TERRAFORM
 
@@ -6,7 +28,7 @@ In the terraform folder are the scripts that you can use to start a new cluster 
 
 If you want to change where the state is written you will need to update versions.tf. For example to use gitlab you will use:
 
-```
+```hcl
 terraform {
   backend "http" {
   }
@@ -20,12 +42,12 @@ terraform {
 ```
 
 Once you are ready, you will need to initialize terraform using
-```
+```bash
 terraform init
 ```
 
 or if you enabled the remote backend you can use:
-```
+```bash
 PROJECT_BASE_URL="git.example.com" \
 PROJECT_ID=699 \
 CLUSTER="myname" \
