@@ -179,14 +179,14 @@ variable "argocd_sync" {
 
 variable "argocd_annotations" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "Send notifications in case anything changes."
   default     = [ ]
 }
 
 variable "argocd_kube_id" {
   type        = string
   description = "Rancher kube id for argocd cluster"
-  default     = "c-dnt7n"
+  default     = "c-5fdz5"
 }
 
 # ----------------------------------------------------------------------
