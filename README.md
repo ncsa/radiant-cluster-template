@@ -8,7 +8,7 @@ If you want to change where the state is written you will need to update version
 
 ```
 terraform {
-  backend "remote" {
+  backend "http" {
   }
   required_providers {
     local = {
