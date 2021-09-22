@@ -1,4 +1,4 @@
 terraform/.terraform
-terraform/.terraform.lock.hcl
+terraform/secrets.auto.tfvars
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
