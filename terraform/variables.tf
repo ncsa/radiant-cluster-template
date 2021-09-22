@@ -141,25 +141,25 @@ variable "admin_radiant" {
 variable "admin_users" {
   type        = set(string)
   description = "Should argocd be used for infrastructure"
-  default     = [ ]
+  default     = []
 }
 
 variable "admin_groups" {
   type        = set(string)
   description = "Should argocd be used for infrastructure"
-  default     = [ ]
+  default     = []
 }
 
 variable "member_users" {
   type        = set(string)
   description = "Should argocd be used for infrastructure"
-  default     = [ ]
+  default     = []
 }
 
 variable "member_groups" {
   type        = set(string)
   description = "Should argocd be used for infrastructure"
-  default     = [ ]
+  default     = []
 }
 
 # ----------------------------------------------------------------------
@@ -180,7 +180,7 @@ variable "argocd_sync" {
 variable "argocd_annotations" {
   type        = set(string)
   description = "Send notifications in case anything changes."
-  default     = [ ]
+  default     = []
 }
 
 variable "argocd_kube_id" {
