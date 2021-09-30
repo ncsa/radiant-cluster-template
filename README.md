@@ -45,11 +45,11 @@ terraform {
 
 Next you need to initialze and configure the backend, the password can be generated in gitlab. If you want to use the project token you will need to make sure it has read/write to the repository to allow to store the state.
 ```bash
-PROJECT_BASE_URL="" \
+PROJECT_BASE_URL="https://git.ncsa.illinois.edu" \
 PROJECT_ID=699 \
-CLUSTER="myname" \
+NAME="kubernetes" \
 PROJECT_USERNAME="terraform" \
-PROJECT_PASSWORD="supersecret" \
+PROJECT_PASSWORD="supersecret" ; \
 terraform init \
   -backend-config="address=https://git.example.com/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}" \
   -backend-config="lock_address=https://git.example.com/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}/lock" \
