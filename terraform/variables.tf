@@ -235,6 +235,12 @@ variable "healthmonitor_notifications" {
   default     = ""
 }
 
+variable "sealedsecrets_enabled" {
+  type        = bool
+  description = "Enable sealed secrets"
+  default     = false
+}
+
 # ----------------------------------------------------------------------
 # INGRESS
 # working:

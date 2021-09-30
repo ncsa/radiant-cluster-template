@@ -73,4 +73,6 @@ module "argocd" {
   admin_groups  = local.admin_groups
   member_users  = var.member_users
   member_groups = var.member_groups
+
+  sealedsecrets_enabled = var.sealedsecrets_enabled
 }
