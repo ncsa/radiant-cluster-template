@@ -85,7 +85,9 @@ argocd_deploy:
   image: bitnami/kubectl:latest
   stage: deploy
   script:
-    - kubectl --token ${TF_VAR_rancher_token} --server "https://gonzo-rancher.ncsa.illinois.edu/k8s/clusters/c-5fdz5" apply -f ./argocd
+    - if [ -d argocd ]; then
+        kubectl --token ${TF_VAR_rancher_token} --server "https://gonzo-rancher.ncsa.illinois.edu/k8s/clusters/c-5fdz5" apply -f ./argocd;
+      fi
   rules:
     - changes:
       - .gitlab-ci.yml
