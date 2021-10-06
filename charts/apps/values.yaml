@@ -1,0 +1,17 @@
+# Set to the name of the cluster. This is used for the project as
+# well as the prefix for application names
+#name: mycluster
+
+# Should applications automatically sync
+#sync: true
+
+# apply configuration files in kubernetes folder
+kubernetes:
+  # URL to this git repo so it can find the kubernetes yaml files
+  # url: https://example.com/cluster.git
+
+  # use a specific version to be checked out
+  # version: HEAD
+
+  # path of the kubernetes yaml files
+  # path: kubernetes

@@ -258,6 +258,12 @@ variable "ingress_controller" {
   default     = "traefik2"
 }
 
+variable "ingress_storageclass" {
+  type        = string
+  description = "storageclass used by ingress controller"
+  default     = ""
+}
+
 # ----------------------------------------------------------------------
 # TRAEFIK
 # ----------------------------------------------------------------------

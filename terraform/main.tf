@@ -62,7 +62,9 @@ module "argocd" {
   rancher_url   = var.rancher_url
   rancher_token = var.rancher_token
 
-  acme_email = var.acme_email
+  ingress_controller   = var.ingress_controller
+  ingress_storageclass = var.ingress_storageclass
+  acme_email           = var.acme_email
 
   argocd_master      = var.argocd_master
   argocd_kube_id     = var.argocd_kube_id

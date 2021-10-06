@@ -1,0 +1,93 @@
+#cache:
+#  key: "terraform"
+#  paths:
+#    - terraform/.terraform/
+
+variables:
+  TF_STATE_NAME: kubernetes
+
+stages:
+  - validate
+  - build
+  - deploy
+
+# ----------------------------------------------------------------------
+# TERRAFORM
+# ----------------------------------------------------------------------
+
+terraform_fmt:
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  stage: validate
+  rules:
+    - changes:
+      - .gitlab-ci.yml
+      - terraform/*
+      - terraform/**/*
+  script:
+    - cd terraform
+    - gitlab-terraform init
+    - gitlab-terraform fmt -check -recursive
+  allow_failure: true
+
+terraform_validate:
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  stage: validate
+  rules:
+    - changes:
+      - .gitlab-ci.yml
+      - terraform/*
+      - terraform/**/*
+  script:
+    - cd terraform
+    - gitlab-terraform init
+    - gitlab-terraform validate
+
+terraform_build:
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  stage: build
+  rules:
+    - changes:
+      - .gitlab-ci.yml
+      - terraform/*
+      - terraform/**/*
+  script:
+    - cd terraform
+    - gitlab-terraform init
+    - gitlab-terraform plan
+    - gitlab-terraform plan-json
+  resource_group: ${CI_PROJECT_NAME}
+  artifacts:
+    paths:
+      - terraform/plan.cache
+    reports:
+      terraform: terraform/plan.json
+
+terraform_deploy:
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  stage: deploy
+  rules:
+    - changes:
+      - .gitlab-ci.yml
+      - terraform/*
+      - terraform/**/*
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - cd terraform
+    - gitlab-terraform init
+    - gitlab-terraform apply
+  resource_group: ${CI_PROJECT_NAME}
+
+# ----------------------------------------------------------------------
+# CLUSTER APPS
+# ----------------------------------------------------------------------
+
+argocd_deploy:
+  image: bitnami/kubectl:latest
+  stage: deploy
+  script:
+    - kubectl --token ${TF_VAR_rancher_token} --server "https://gonzo-rancher.ncsa.illinois.edu/k8s/clusters/c-5fdz5" apply -f ./argocd
+  rules:
+    - changes:
+      - .gitlab-ci.yml
+      - argocd/*
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

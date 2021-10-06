@@ -32,6 +32,13 @@ Once you have setup your variables, you will need to initialize terraform:
 terraform init
 ```
 
+To update the modules that come from github, you need to delete them before you fetch them:
+
+```bash
+rm -rf .terraform/modules/{argocd,openstack_cluster,rancher_cluster}
+terraform init
+```
+
 ## Shared State
 
 If you want to change where the state is written you will can add a file called `backend.tf`. This file can contain the specific setup where to store the shared state. For example when using gitlab to store the state you can create the following file, see also [gitlab documentation](https://docs.gitlab.com/ee/user/infrastructure/iac/terraform_state.html) for more info.
@@ -63,80 +70,9 @@ terraform init \
 
 ## GitLab Pipelines
 
-You can setup a gitlab runner to automatically apply any changes you make to the git repo and update the cluster, for example to add/remove worker nodes. You can leverage of the ability to store variables at the project and group level. For example you can have a group where you keep all your clusters and use this for shared secrets, and have per project secrets for each git repo.  The variables will need to be called `TF_VAR_<variable-name>`.
+You can setup a gitlab runner to automatically apply any changes you make to the git repo and update the cluster, for example to add/remove worker nodes. You can leverage of the ability to store variables at the project and group level. For example you can have a group where you keep all your clusters and use this for shared secrets, and have per project secrets for each git repo.  The variables will need to be called `TF_VAR_<variable-name>`. 
 
-Following is an example of the gitlab runner:
-
-```yaml
-image:
-  name: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
-
-variables:
-  TF_ROOT: terraform
-  TF_STATE_NAME: kubernetes #${TF_STATE_NAME:-kubernetes}
-
-#cache:
-#  key: "${TF_ROOT}"
-#  paths:
-#    - ${TF_ROOT}/.terraform/
-
-stages:
-  - init
-  - validate
-  - build
-  - deploy
-
-terraform_init:
-  stage: init
-  rules:
-    - changes:
-      - .gitlab-ci.yml
-      - terraform/*
-      - terraform/**/*
-  script:
-    - cd ${TF_ROOT}
-    - gitlab-terraform init
-
-terraform_fmt:
-  stage: validate
-  needs: []
-  script:
-    - cd ${TF_ROOT}
-    - gitlab-terraform fmt -check -recursive
-  allow_failure: true
-
-terraform_validate:
-  stage: validate
-  script:
-    - cd ${TF_ROOT}
-    - gitlab-terraform validate
-
-terraform_build:
-  stage: build
-  script:
-    - cd ${TF_ROOT}
-    - gitlab-terraform plan
-    - gitlab-terraform plan-json
-  resource_group: ${TF_STATE_NAME}
-  artifacts:
-    paths:
-      - ${TF_ROOT}/plan.cache
-    reports:
-      terraform: ${TF_ROOT}/plan.json
-
-terraform_deploy:
-  stage: deploy
-  script:
-    - cd ${TF_ROOT}
-    - gitlab-terraform apply
-  resource_group: ${TF_STATE_NAME}
-  #when: manual
-  only:
-    variables:
-      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-```
-
-
+Copy the [example](gitlab-ci.yml) of the gitlab runner to .gitlab-ci.yml
 
 ## Hints
 
@@ -145,4 +81,3 @@ To get the versions for RKE2 you can run the following from the command line:
 ```bash
 curl -s https://api.github.com/repos/rancher/rke2/releases | jq '.[] | select(.prerelease == false) | .name'
 ```
-
