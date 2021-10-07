@@ -23,11 +23,11 @@ terraform_fmt:
       - .gitlab-ci.yml
       - terraform/*
       - terraform/**/*
+  allow_failure: true
   script:
     - cd terraform
     - gitlab-terraform init
     - gitlab-terraform fmt -check -recursive
-  allow_failure: true
 
 terraform_validate:
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
@@ -45,6 +45,7 @@ terraform_validate:
 terraform_build:
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
   stage: build
+  resource_group: ${CI_PROJECT_NAME}
   rules:
     - changes:
       - .gitlab-ci.yml
@@ -55,7 +56,6 @@ terraform_build:
     - gitlab-terraform init
     - gitlab-terraform plan
     - gitlab-terraform plan-json
-  resource_group: ${CI_PROJECT_NAME}
   artifacts:
     paths:
       - terraform/plan.cache
@@ -65,17 +65,17 @@ terraform_build:
 terraform_deploy:
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
   stage: deploy
+  resource_group: ${CI_PROJECT_NAME}
   rules:
-    - changes:
-      - .gitlab-ci.yml
-      - terraform/*
-      - terraform/**/*
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - .gitlab-ci.yml
+        - terraform/*
+        - terraform/**/*
   script:
     - cd terraform
     - gitlab-terraform init
     - gitlab-terraform apply
-  resource_group: ${CI_PROJECT_NAME}
 
 # ----------------------------------------------------------------------
 # CLUSTER APPS
@@ -84,12 +84,12 @@ terraform_deploy:
 argocd_deploy:
   image: bitnami/kubectl:latest
   stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - .gitlab-ci.yml
+        - argocd/*
   script:
     - if [ -d argocd ]; then
         kubectl --token ${TF_VAR_rancher_token} --server "https://gonzo-rancher.ncsa.illinois.edu/k8s/clusters/c-5fdz5" apply -f ./argocd;
       fi
-  rules:
-    - changes:
-      - .gitlab-ci.yml
-      - argocd/*
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
