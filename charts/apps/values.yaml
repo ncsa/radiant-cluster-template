@@ -7,6 +7,9 @@
 
 # apply configuration files in kubernetes folder
 kubernetes:
+  # should the kubernetes application be installed
+  enabled: false
+
   # URL to this git repo so it can find the kubernetes yaml files
   # url: https://example.com/cluster.git
 

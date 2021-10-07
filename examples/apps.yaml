@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mycluster
+  labels:
+    cluster: mycluster
+    app: mycluster
+  namespace: argocd
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-needs-update.slack: mycluster-alerts
+    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: mycluster-alerts
+spec:
+  project: mycluster
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    repoURL: https://example.com/clusters/mycluster.git
+    path: charts/apps
+    targetRevision: HEAD
+    helm:
+      version: v3
+      releaseName: mycluster

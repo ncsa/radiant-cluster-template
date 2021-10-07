@@ -1,3 +1,4 @@
+{{- if .Values.kubernetes.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -25,8 +26,5 @@ spec:
   source:
     repoURL: {{ .Values.kubernetes.url | quote }}
     path: {{ .Values.kubernetes.path | default "kubernetes" | quote }}
-    {{- if .Values.kubernetes }}
     targetRevision: {{ .Values.kubernetes.version | default "HEAD" | quote }}
-    {{- else }}
-    targetRevision: "HEAD"
-    {{- end }}
+{{- end }}

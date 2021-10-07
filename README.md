@@ -68,17 +68,21 @@ terraform init \
   -backend-config="retry_wait_min=5"
 ```
 
+# ArgoCD Applications
+
+The folder charts can contain helm charts that are referenced from the root app. An convienence app is placed there called kubernetes. This application will deploy all files in the `kubernetes` folder by default. To enable this process set `kubernetes.enabled` to true in values.yaml. You can add more applications to this helm chart, as well as the specific values to the values.yaml file to setup your cluster. If this git repo requires authentication you can place a [git repo](examples/gitrepo.yaml) in the argocd folder (see below).
+
 # GitLab Pipelines
 
 You can setup a gitlab runner to automatically apply any changes you make to the git repo and update the cluster, for example to add/remove worker nodes. You can leverage of the ability to store variables at the project and group level. For example you can have a group where you keep all your clusters and use this for shared secrets, and have per project secrets for each git repo.  The variables will need to be called `TF_VAR_<variable-name>`. 
 
-Copy the [example](gitlab-ci.yml) of the gitlab runner to .gitlab-ci.yml
+Copy the [example](examples/gitlab-ci.yml) of the gitlab runner to .gitlab-ci.yml
 
 ## ArgoCD
 
-You can create a folder called arogcd and place the files to be applied to the argocd cluster. The pipeline will check during the `deploy` stage to see if the folder exists, and if it does, it applies the files to the argocd cluster. This is a convenient way to get git repo defined (using sealed secrets off course) as well as the root app for hte cluster.
+You can create a folder called arogcd and place the files to be applied to the argocd cluster. The pipeline will check during the `deploy` stage to see if the folder exists, and if it does, it applies the files to the argocd cluster. This is a convenient way to get [git repo](examples/gitrepo.yaml) defined (using sealed secrets off course) as well as the [root app](examples/apps.yaml) for the cluster.
 
-## Hints
+# Hints
 
 To get the versions for RKE2 you can run the following from the command line:
 
