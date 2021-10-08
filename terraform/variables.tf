@@ -205,7 +205,7 @@ variable "longhorn_enabled" {
   default     = true
 }
 
-variable "longhorn_replica" {
+variable "longhorn_replicas" {
   type        = string
   description = "Number of replicas"
   default     = 3

@@ -79,7 +79,7 @@ module "argocd" {
 
   monitoring_enabled          = var.monitoring_enabled
   longhorn_enabled            = var.longhorn_enabled
-  longhorn_replica            = var.longhorn_replica
+  longhorn_replicas           = var.longhorn_replicas
   nfs_enabled                 = var.nfs_enabled
   healthmonitor_enabled       = var.healthmonitor_enabled
   healthmonitor_nfs           = var.healthmonitor_nfs
