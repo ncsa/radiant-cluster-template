@@ -64,6 +64,7 @@ module "argocd" {
 
   ingress_controller   = var.ingress_controller
   ingress_storageclass = var.ingress_storageclass
+  acme_staging         = var.acme_staging
   acme_email           = var.acme_email
 
   argocd_master      = var.argocd_master
@@ -76,5 +77,12 @@ module "argocd" {
   member_users  = var.member_users
   member_groups = var.member_groups
 
-  sealedsecrets_enabled = var.sealedsecrets_enabled
+  monitoring_enabled          = var.monitoring_enabled
+  longhorn_enabled            = var.longhorn_enabled
+  longhorn_replica            = var.longhorn_replica
+  nfs_enabled                 = var.nfs_enabled
+  healthmonitor_enabled       = var.healthmonitor_enabled
+  healthmonitor_nfs           = var.healthmonitor_nfs
+  healthmonitor_notifications = var.healthmonitor_notifications
+  sealedsecrets_enabled       = var.sealedsecrets_enabled
 }
