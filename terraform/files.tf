@@ -3,7 +3,7 @@ resource "local_file" "ssh_private_key" {
   filename             = pathexpand("~/.ssh/${var.cluster_name}.pem")
   directory_permission = "0700"
   file_permission      = "0600"
-  content              = module.openstack_cluster.private_key_ssh
+  content              = module.cluster.private_key_ssh
 }
 
 resource "local_file" "ssh_config" {
@@ -11,7 +11,7 @@ resource "local_file" "ssh_config" {
   filename             = pathexpand("~/.ssh/config.d/${var.cluster_name}")
   directory_permission = "0700"
   file_permission      = "0600"
-  content              = module.openstack_cluster.ssh_config
+  content              = module.cluster.ssh_config
 }
 
 resource "local_file" "kubeconfig" {
@@ -19,5 +19,5 @@ resource "local_file" "kubeconfig" {
   filename             = pathexpand("~/.kube/${var.cluster_name}.kubeconfig")
   directory_permission = "0700"
   file_permission      = "0600"
-  content              = module.rancher_cluster.kubeconfig
+  content              = module.cluster.kubeconfig
 }

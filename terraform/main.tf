@@ -1,37 +1,27 @@
 locals {
-  admin_groups = var.admin_radiant ? setunion(var.admin_groups, ["radiant_${module.openstack_cluster.project_name}"]) : var.admin_groups
+  admin_groups = var.admin_radiant ? setunion(var.admin_groups, ["radiant_${module.cluster.project_name}"]) : var.admin_groups
 }
 
-module "rancher_cluster" {
-  source = "github.com/ncsa/radiant-cluster/terraform/modules/rancher"
-
+module "cluster" {
+  source = "github.com/ncsa/radiant-cluster/terraform/modules/rke1"
+  
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
-  rancher_url         = var.rancher_url
-  rancher_token       = var.rancher_token
-  cluster_type        = var.cluster_type
+
+  rancher_url        = var.rancher_url
+  rancher_token      = var.rancher_token
+  monitoring_enabled = var.monitoring_enabled
+  longhorn_enabled   = var.longhorn_enabled
+  longhorn_replicas  = var.longhorn_replicas
 
   admin_users   = var.admin_users
   admin_groups  = local.admin_groups
   member_users  = var.member_users
   member_groups = var.member_groups
-}
-
-module "openstack_cluster" {
-  source = "github.com/ncsa/radiant-cluster/terraform/modules/compute/openstack"
-
-  cluster_name = var.cluster_name
-  cluster_type = var.cluster_type
-
-  rke2_version   = var.rke2_version
-  rancher_import = module.rancher_cluster.import_command
 
   openstack_url               = var.openstack_url
   openstack_credential_id     = var.openstack_credential_id
   openstack_credential_secret = var.openstack_credential_secret
-  openstack_external_net      = var.openstack_external_net
-  #openstack_credential_id      = does not work
-  #openstack_credential_secret  = does not work
   #public_key                   = use default in module
 
   controlplane_count = var.controlplane_count
@@ -49,15 +39,15 @@ module "openstack_cluster" {
 
 module "argocd" {
   source = "github.com/ncsa/radiant-cluster/terraform/modules/argocd"
-
+  
   cluster_name    = var.cluster_name
-  cluster_kube_id = module.rancher_cluster.kube.id
-  floating_ip     = module.openstack_cluster.floating_ip
+  cluster_kube_id = module.cluster.kube_id
+  floating_ip     = module.cluster.floating_ip
 
   openstack_url               = var.openstack_url
   openstack_credential_id     = var.openstack_credential_id
   openstack_credential_secret = var.openstack_credential_secret
-  openstack_project           = module.openstack_cluster.project_name
+  openstack_project           = module.cluster.project_name
 
   rancher_url   = var.rancher_url
   rancher_token = var.rancher_token
@@ -66,6 +56,7 @@ module "argocd" {
   ingress_storageclass = var.ingress_storageclass
   acme_staging         = var.acme_staging
   acme_email           = var.acme_email
+  traefik2_ports       = var.traefik2_ports
 
   argocd_master      = var.argocd_master
   argocd_kube_id     = var.argocd_kube_id
@@ -77,9 +68,8 @@ module "argocd" {
   member_users  = var.member_users
   member_groups = var.member_groups
 
-  monitoring_enabled          = var.monitoring_enabled
-  longhorn_enabled            = var.longhorn_enabled
-  longhorn_replicas           = var.longhorn_replicas
+  monitoring_enabled          = false
+  longhorn_enabled            = false
   nfs_enabled                 = var.nfs_enabled
   healthmonitor_enabled       = var.healthmonitor_enabled
   healthmonitor_nfs           = var.healthmonitor_nfs

@@ -13,16 +13,6 @@ variable "cluster_description" {
   default     = ""
 }
 
-variable "cluster_type" {
-  type        = string
-  description = "Cluster type, can be either rke or rke2"
-  default     = "rke2"
-  validation {
-    condition     = var.cluster_type == "rke" || var.cluster_type == "rke2"
-    error_message = "Image needs to be one of [rke, rke2]."
-  }
-}
-
 variable "write_ssh_files" {
   type        = bool
   description = "Write out the files to ssh into cluster"
@@ -33,16 +23,6 @@ variable "write_kubeconfig_files" {
   type        = bool
   description = "Write out the kubeconfig for devops user"
   default     = false
-}
-
-# ----------------------------------------------------------------------
-# RKE2
-# ----------------------------------------------------------------------
-
-variable "rke2_version" {
-  type        = string
-  description = "Version of rke2 to install, blank is the latest"
-  default     = ""
 }
 
 # ----------------------------------------------------------------------
@@ -186,11 +166,11 @@ variable "argocd_annotations" {
 variable "argocd_kube_id" {
   type        = string
   description = "Rancher kube id for argocd cluster"
-  default     = "c-5fdz5"
+  default     = "c-p9m26"
 }
 
 # ----------------------------------------------------------------------
-# ARGOCD APPLICATIONS
+# APPLICATIONS (some rancher, some argocd)
 # ----------------------------------------------------------------------
 
 variable "monitoring_enabled" {
@@ -261,7 +241,7 @@ variable "ingress_controller" {
 variable "ingress_storageclass" {
   type        = string
   description = "storageclass used by ingress controller"
-  default     = ""
+  default     = "nfs-condo"
 }
 
 # ----------------------------------------------------------------------
@@ -290,6 +270,12 @@ variable "traefik_use_certmanager" {
   type        = bool
   description = "Should traefik v2 use cert manager"
   default     = false
+}
+
+variable "traefik2_ports" {
+  type        = map
+  description = "Additional ports to add to traefik"
+  default     = {}
 }
 
 # ----------------------------------------------------------------------
