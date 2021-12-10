@@ -273,7 +273,7 @@ variable "traefik_use_certmanager" {
 }
 
 variable "traefik2_ports" {
-  type        = map
+  type        = map(any)
   description = "Additional ports to add to traefik"
   default     = {}
 }

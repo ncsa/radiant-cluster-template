@@ -4,7 +4,7 @@ locals {
 
 module "cluster" {
   source = "github.com/ncsa/radiant-cluster/terraform/modules/rke1"
-  
+
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
 
@@ -39,7 +39,7 @@ module "cluster" {
 
 module "argocd" {
   source = "github.com/ncsa/radiant-cluster/terraform/modules/argocd"
-  
+
   cluster_name    = var.cluster_name
   cluster_kube_id = module.cluster.kube_id
   floating_ip     = module.cluster.floating_ip
