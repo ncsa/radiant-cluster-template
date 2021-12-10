@@ -16,7 +16,7 @@ variable "cluster_description" {
 variable "write_ssh_files" {
   type        = bool
   description = "Write out the files to ssh into cluster"
-  default     = true
+  default     = false
 }
 
 variable "write_kubeconfig_files" {
