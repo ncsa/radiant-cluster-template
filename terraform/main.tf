@@ -24,9 +24,9 @@ module "cluster" {
   openstack_credential_secret = var.openstack_credential_secret
   #public_key                   = use default in module
 
-  controlplane_count = var.controlplane_count
-  #controlplane_flavor          = use default in module
-  #controlplane_disksize        = use default in module
+  controlplane_count    = var.controlplane_count
+  controlplane_flavor   = var.controlplane_flavor
+  controlplane_disksize = var.controlplane_disksize
 
   worker_count    = var.worker_count
   worker_flavor   = var.worker_flavor

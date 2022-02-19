@@ -91,5 +91,5 @@ argocd_deploy:
         - argocd/*
   script:
     - if [ -d argocd ]; then
-        kubectl --token ${TF_VAR_rancher_token} --server "https://gonzo-rancher.ncsa.illinois.edu/k8s/clusters/c-5fdz5" apply -f ./argocd;
+        kubectl --token ${TF_VAR_rancher_token} --server "https://gonzo-rancher.ncsa.illinois.edu/k8s/clusters/${TF_VAR_argocd_kube_id}" apply -f ./argocd;
       fi
