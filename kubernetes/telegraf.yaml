@@ -1,0 +1,298 @@
+# kubectl -n telegraf delete configmap/telegraf
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: telegraf
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: telegraf
+  namespace: telegraf
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: influx:cluster:viewer
+  labels:
+    rbac.authorization.k8s.io/aggregate-view-telegraf: "true"
+rules:
+  - apiGroups: [""]
+    resources: ["persistentvolumes", "nodes"]
+    verbs: ["get", "list"]
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: influx:telegraf
+aggregationRule:
+  clusterRoleSelectors:
+    - matchLabels:
+        rbac.authorization.k8s.io/aggregate-view-telegraf: "true"
+    - matchLabels:
+        rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: influx:telegraf:viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: influx:telegraf
+subjects:
+  - kind: ServiceAccount
+    name: telegraf
+    namespace: telegraf
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-daemonset
+  namespace: telegraf
+data:
+  telegraf.conf: |+
+    [global_tags]
+      cluster = "${CLUSTER}"
+      project = "${PROJECT}"
+    [agent]
+      hostname = "$HOSTNAME"
+    [[outputs.influxdb_v2]]
+      urls = ["$INFLUX_URL"]
+      token = "$INFLUX_TOKEN"
+      organization = "$INFLUX_ORG"
+      bucket = "$INFLUX_BUCKET"
+    [[inputs.cpu]]
+      percpu = false
+      totalcpu = true
+      collect_cpu_time = false
+      report_active = false
+    [[inputs.disk]]
+      ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
+    [[inputs.diskio]]
+    [[inputs.kernel]]
+    [[inputs.mem]]
+    [[inputs.processes]]
+    [[inputs.swap]]
+    [[inputs.system]]
+    #[[inputs.docker]]
+    #  endpoint = "unix:///var/run/docker.sock"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-deployment
+  namespace: telegraf
+data:
+  telegraf.conf: |+
+    [global_tags]
+      cluster = "${CLUSTER}"
+      project = "${PROJECT}"
+    [agent]
+      hostname = "$HOSTNAME"
+    [[outputs.influxdb_v2]]
+      urls = ["$INFLUX_URL"]
+      token = "$INFLUX_TOKEN"
+      organization = "$INFLUX_ORG"
+      bucket = "$INFLUX_BUCKET"
+    [[inputs.kube_inventory]]
+      url = "https://kubernetes.default"
+      namespace = ""
+      tls_ca = "/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: telegraf
+  namespace: telegraf
+spec:
+  selector:
+    matchLabels:
+      name: telegraf
+  template:
+    metadata:
+      labels:
+        name: telegraf
+    spec:
+      serviceAccountName: telegraf
+      tolerations:
+      - operator: Exists
+      # - key: node-role.kubernetes.io/control-plane
+      #   operator: Exists
+      #   effect: NoSchedule
+      # - key: node-role.kubernetes.io/etcd
+      #   operator: Exists
+      #   effect: NoExecute
+      # - key: node-role.kubernetes.io/master
+      #   operator: Exists
+      #   effect: NoSchedule
+      containers:
+      - name: telegraf
+        image: telegraf:1.23.3
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: HOSTIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: "HOST_ETC"
+          value: "/rootfs/etc"
+        - name: "HOST_PROC"
+          value: "/rootfs/proc"
+        - name: "HOST_SYS"
+          value: "/rootfs/sys"
+        - name: "HOST_VAR"
+          value: "/rootfs/var"
+        - name: "HOST_RUN"
+          value: "/rootfs/run"
+        - name: CLUSTER
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: cluster
+        - name: PROJECT
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: project
+        - name: INFLUX_URL
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: url
+        - name: INFLUX_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: token
+        - name: INFLUX_ORG
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: org
+        - name: INFLUX_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: bucket
+        volumeMounts:
+        - name: rootfs
+          mountPath: /rootfs
+          readOnly: true
+        - name: docker
+          mountPath: /var/run/docker.sock
+          readOnly: true
+        - name: utmp
+          mountPath: /var/run/utmp
+          readOnly: true
+        - name: config
+          mountPath: /etc/telegraf
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: rootfs
+        hostPath:
+          path: /
+      - name: docker
+        hostPath:
+          path: /var/run/docker.sock
+      - name: utmp
+        hostPath:
+          path: /var/run/utmp
+      - name: config
+        configMap:
+          name: telegraf-daemonset
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf
+  namespace: telegraf
+spec:
+  selector:
+    matchLabels:
+      name: telegraf
+  template:
+    metadata:
+      labels:
+        name: telegraf
+    spec:
+      serviceAccountName: telegraf
+      containers:
+      - name: telegraf
+        image: telegraf:1.23.3
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: "HOST_ETC"
+          value: "/rootfs/etc"
+        - name: "HOST_PROC"
+          value: "/rootfs/proc"
+        - name: "HOST_SYS"
+          value: "/rootfs/sys"
+        - name: "HOST_VAR"
+          value: "/rootfs/var"
+        - name: "HOST_RUN"
+          value: "/rootfs/run"
+        - name: CLUSTER
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: cluster
+        - name: PROJECT
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: project
+        - name: INFLUX_URL
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: url
+        - name: INFLUX_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: token
+        - name: INFLUX_ORG
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: org
+        - name: INFLUX_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: telegraf
+              key: bucket
+        volumeMounts:
+        - name: rootfs
+          mountPath: /rootfs
+          readOnly: true
+        - name: config
+          mountPath: /etc/telegraf
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: rootfs
+        hostPath:
+          path: /
+      - name: config
+        configMap:
+          name: telegraf-deployment
