@@ -57,6 +57,18 @@ variable "openstack_external_net" {
 # KUBERNETES NODES
 # ----------------------------------------------------------------------
 
+variable "rke1_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = ""
+}
+
+variable "old_hostnames" {
+  type        = bool
+  description = "should old hostname be used (base 0)"
+  default     = false
+}
+
 variable "controlplane_count" {
   type        = string
   description = "Desired quantity of control-plane nodes"
@@ -179,6 +191,12 @@ variable "monitoring_enabled" {
   default     = true
 }
 
+variable "cinder_enabled" {
+  type        = bool
+  description = "Enable cinder storage"
+  default     = false
+}
+
 variable "longhorn_enabled" {
   type        = bool
   description = "Enable longhorn storage"
@@ -195,6 +213,18 @@ variable "nfs_enabled" {
   type        = bool
   description = "Enable NFS storage"
   default     = true
+}
+
+variable "nfs_server" {
+  type        = string
+  description = "NFS server"
+  default     = "radiant-nfs.ncsa.illinois.edu"
+}
+
+variable "nfs_path" {
+  type        = string
+  description = "path on nfs server to create folder for mounts"
+  default     = ""
 }
 
 variable "healthmonitor_enabled" {
@@ -221,6 +251,12 @@ variable "sealedsecrets_enabled" {
   default     = false
 }
 
+variable "metallb_enabled" {
+  type        = bool
+  description = "Enable MetalLB"
+  default     = true
+}
+
 # ----------------------------------------------------------------------
 # INGRESS
 # working:
@@ -231,6 +267,12 @@ variable "sealedsecrets_enabled" {
 # - nginx
 # - nginxinc
 # ----------------------------------------------------------------------
+
+variable "ingress_controller_enabled" {
+  type        = bool
+  description = "Enable IngressController"
+  default     = true
+}
 
 variable "ingress_controller" {
   type        = string
