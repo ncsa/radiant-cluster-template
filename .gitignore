@@ -1,4 +1,10 @@
+# ignore secrets
+gitrepo.yaml
+variables.txt
+*.secret.yaml
+
+# ignore terraform files
 terraform/.terraform
-terraform/secrets.auto.tfvars
+terraform/*.auto.tfvars
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
