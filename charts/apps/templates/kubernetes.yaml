@@ -27,4 +27,11 @@ spec:
     repoURL: {{ .Values.kubernetes.url | quote }}
     path: {{ .Values.kubernetes.path | default "kubernetes" | quote }}
     targetRevision: {{ .Values.kubernetes.version | default "HEAD" | quote }}
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      managedFieldsManagers:
+        - clusterrole-aggregation-controller
+      jsonPointers:
+        - /rules
 {{- end }}

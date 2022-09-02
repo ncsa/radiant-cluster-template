@@ -56,8 +56,8 @@ module "argocd" {
   rancher_url   = var.rancher_url
   rancher_token = var.rancher_token
 
-  argocd_master      = var.argocd_master
-  argocd_kube_id     = var.argocd_kube_id
+  argocd_master      = var.argocd_enabled ? var.argocd_master : false
+  argocd_kube_id     = var.argocd_enabled ? var.argocd_kube_id : ""
   argocd_annotations = var.argocd_annotations
   argocd_sync        = var.argocd_sync
 
@@ -81,8 +81,6 @@ module "argocd" {
   # storage classes
   cinder_enabled = var.cinder_enabled
   nfs_enabled    = var.nfs_enabled
-  nfs_server     = var.nfs_server
-  nfs_path       = var.nfs_path
 
   # load balancer
   metallb_enabled = var.metallb_enabled
@@ -91,7 +89,7 @@ module "argocd" {
   sealedsecrets_enabled = var.sealedsecrets_enabled
 
   # monitoring services
-  healthmonitor_enabled       = var.healthmonitor_enabled
-  healthmonitor_nfs           = var.healthmonitor_nfs
-  healthmonitor_notifications = var.healthmonitor_notifications
+  healthmonitor_enabled = var.healthmonitor_enabled
+  healthmonitor_nfs     = var.healthmonitor_nfs
+  healthmonitor_secrets = var.healthmonitor_secrets
 }

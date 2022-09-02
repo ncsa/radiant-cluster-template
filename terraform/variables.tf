@@ -57,10 +57,11 @@ variable "openstack_external_net" {
 # KUBERNETES NODES
 # ----------------------------------------------------------------------
 
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 variable "rke1_version" {
   type        = string
   description = "Version of rke1 to install."
-  default     = ""
+  default     = "v1.21.14-rancher1-1"
 }
 
 variable "old_hostnames" {
@@ -163,6 +164,12 @@ variable "argocd_master" {
   default     = false
 }
 
+variable "argocd_enabled" {
+  type        = bool
+  description = "Should argocd resources be created"
+  default     = true
+}
+
 variable "argocd_sync" {
   type        = bool
   description = "Should apps automatically sync"
@@ -215,18 +222,6 @@ variable "nfs_enabled" {
   default     = true
 }
 
-variable "nfs_server" {
-  type        = string
-  description = "NFS server"
-  default     = "radiant-nfs.ncsa.illinois.edu"
-}
-
-variable "nfs_path" {
-  type        = string
-  description = "path on nfs server to create folder for mounts"
-  default     = ""
-}
-
 variable "healthmonitor_enabled" {
   type        = bool
   description = "Enable healthmonitor"
@@ -239,10 +234,10 @@ variable "healthmonitor_nfs" {
   default     = true
 }
 
-variable "healthmonitor_notifications" {
+variable "healthmonitor_secrets" {
   type        = string
-  description = "Notifications for healthmonitor"
-  default     = ""
+  description = "Secrets (config/checks/notifications) for healthmonitor"
+  default     = "config"
 }
 
 variable "sealedsecrets_enabled" {
@@ -283,7 +278,7 @@ variable "ingress_controller" {
 variable "ingress_storageclass" {
   type        = string
   description = "storageclass used by ingress controller"
-  default     = "nfs-condo"
+  default     = "nfs-taiga"
 }
 
 # ----------------------------------------------------------------------
