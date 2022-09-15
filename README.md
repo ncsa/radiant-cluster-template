@@ -58,9 +58,9 @@ NAME="kubernetes" \
 PROJECT_USERNAME="terraform" \
 PROJECT_PASSWORD="supersecret" ; \
 terraform init \
-  -backend-config="address=https://git.example.com/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}" \
-  -backend-config="lock_address=https://git.example.com/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}/lock" \
-  -backend-config="unlock_address=https://git.example.com/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}/lock" \
+  -backend-config="address=${PROJECT_BASE_URL}/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}" \
+  -backend-config="lock_address=${PROJECT_BASE_URL}/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}/lock" \
+  -backend-config="unlock_address=${PROJECT_BASE_URL}/api/v4/projects/${PROJECT_ID}/terraform/state/${CLUSTER}/lock" \
   -backend-config="username=${PROJECT_USERNAME}" \
   -backend-config="password=${PROJECT_PASSWORD}" \
   -backend-config="lock_method=POST" \
