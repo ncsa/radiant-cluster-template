@@ -79,7 +79,7 @@ variable "controlplane_count" {
 variable "controlplane_flavor" {
   type        = string
   description = "Desired flavor of control-plane nodes"
-  default     = "m1.medium"
+  default     = "gp.medium"
 }
 
 variable "controlplane_disksize" {
@@ -97,7 +97,7 @@ variable "worker_count" {
 variable "worker_flavor" {
   type        = string
   description = "Desired flavor of worker nodes"
-  default     = "m1.large"
+  default     = "gp.large"
 }
 
 variable "worker_disksize" {
@@ -128,7 +128,7 @@ variable "rancher_token" {
 variable "admin_radiant" {
   type        = bool
   description = "Should users that have access to radiant be an admin"
-  default     = true
+  default     = false
 }
 
 variable "admin_users" {

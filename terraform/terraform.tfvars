@@ -1,7 +1,7 @@
 #cluster_name                  = "PICK ONE"
 
 # KUBERNETES
-#worker_flavor                 = "m1.large"
+#worker_flavor                 = "gp.large"
 #worker_count                  = 3 
 #admin_users                   = [ "" ]
 
