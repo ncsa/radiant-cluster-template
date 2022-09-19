@@ -133,25 +133,25 @@ variable "admin_radiant" {
 
 variable "admin_users" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all users that have admin rights in argocd and the cluster"
   default     = []
 }
 
 variable "admin_groups" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all groups that have admin rights in argocd and the cluster"
   default     = []
 }
 
 variable "member_users" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all users that have access rights in argocd and the cluster"
   default     = []
 }
 
 variable "member_groups" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all groups that have access rights in argocd and the cluster"
   default     = []
 }
 
