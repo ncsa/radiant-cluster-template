@@ -84,8 +84,8 @@ You can create a folder called arogcd and place the files to be applied to the a
 
 # Hints
 
-To get the versions for RKE2 you can run the following from the command line:
+To get the versions for RKE1 you can run the following from the command line:
 
 ```bash
-curl -s https://api.github.com/repos/rancher/rke2/releases | jq '.[] | select(.prerelease == false) | .name'
+curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 ```
