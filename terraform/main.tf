@@ -34,7 +34,7 @@ module "cluster" {
   worker_flavor   = var.worker_flavor
   worker_disksize = var.worker_disksize
 
-  floating_ip = var.metallb_enabled ? var.floating_ip : 0
+  floating_ip = var.floating_ip
 
   rke1_version = var.rke1_version
 
