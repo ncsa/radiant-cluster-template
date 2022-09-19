@@ -252,6 +252,12 @@ variable "metallb_enabled" {
   default     = true
 }
 
+variable "floating_ip" {
+  type        = string
+  description = "Number of floating IPs for MetalLB"
+  default     = 2
+}
+
 # ----------------------------------------------------------------------
 # INGRESS
 # working:
