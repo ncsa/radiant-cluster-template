@@ -22,6 +22,7 @@ module "cluster" {
   openstack_url               = var.openstack_url
   openstack_credential_id     = var.openstack_credential_id
   openstack_credential_secret = var.openstack_credential_secret
+  openstack_zone              = var.openstack_zone
   #public_key                   = use default in module
 
   old_hostnames = var.old_hostnames

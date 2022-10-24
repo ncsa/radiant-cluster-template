@@ -53,6 +53,12 @@ variable "openstack_external_net" {
   default     = "ext-net"
 }
 
+variable "openstack_zone" {
+  type        = string
+  description = "default zone to use for openstack nodes"
+  default     = "nova"
+}
+
 # ----------------------------------------------------------------------
 # KUBERNETES NODES
 # ----------------------------------------------------------------------
