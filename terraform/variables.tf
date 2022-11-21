@@ -164,16 +164,16 @@ variable "member_groups" {
 # ----------------------------------------------------------------------
 # ARGOCD
 # ----------------------------------------------------------------------
-variable "argocd_master" {
-  type        = bool
-  description = "Is this the master argocd cluster, you most likely don't need to modify this value"
-  default     = false
-}
-
 variable "argocd_enabled" {
   type        = bool
   description = "Should argocd resources be created"
   default     = true
+}
+
+variable "argocd_repo_version" {
+  type        = string
+  description = "What version of the application to deploy"
+  default     = "HEAD"
 }
 
 variable "argocd_sync" {
@@ -198,7 +198,7 @@ variable "argocd_kube_id" {
 # APPLICATIONS (some rancher, some argocd)
 # ----------------------------------------------------------------------
 
-variable "monitoring_enabled" {
+variable "rancher_monitoring_enabled" {
   type        = bool
   description = "Enable monitoring in rancher"
   default     = true

@@ -8,11 +8,11 @@ module "cluster" {
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
 
-  rancher_url        = var.rancher_url
-  rancher_token      = var.rancher_token
-  monitoring_enabled = var.monitoring_enabled
-  longhorn_enabled   = var.longhorn_enabled
-  longhorn_replicas  = var.longhorn_replicas
+  rancher_url   = var.rancher_url
+  rancher_token = var.rancher_token
+
+  longhorn_enabled  = var.longhorn_enabled
+  longhorn_replicas = var.longhorn_replicas
 
   admin_users   = var.admin_users
   admin_groups  = local.admin_groups
@@ -59,10 +59,10 @@ module "argocd" {
   rancher_url   = var.rancher_url
   rancher_token = var.rancher_token
 
-  argocd_master      = var.argocd_enabled ? var.argocd_master : false
-  argocd_kube_id     = var.argocd_enabled ? var.argocd_kube_id : ""
-  argocd_annotations = var.argocd_annotations
-  argocd_sync        = var.argocd_sync
+  argocd_repo_version = var.argocd_repo_version
+  argocd_kube_id      = var.argocd_enabled ? var.argocd_kube_id : ""
+  argocd_annotations  = var.argocd_annotations
+  argocd_sync         = var.argocd_sync
 
   admin_users   = var.admin_users
   admin_groups  = local.admin_groups
@@ -70,8 +70,7 @@ module "argocd" {
   member_groups = var.member_groups
 
   # not managed by argocd but rancher
-  monitoring_enabled = false
-  longhorn_enabled   = false
+  longhorn_enabled = false
 
   # ingress controller
   ingress_controller_enabled = var.ingress_controller_enabled
@@ -92,7 +91,8 @@ module "argocd" {
   sealedsecrets_enabled = var.sealedsecrets_enabled
 
   # monitoring services
-  healthmonitor_enabled = var.healthmonitor_enabled
-  healthmonitor_nfs     = var.healthmonitor_nfs
-  healthmonitor_secrets = var.healthmonitor_secrets
+  rancher_monitoring_enabled = var.rancher_monitoring_enabled
+  healthmonitor_enabled      = var.healthmonitor_enabled
+  healthmonitor_nfs          = var.healthmonitor_nfs
+  healthmonitor_secrets      = var.healthmonitor_secrets
 }
