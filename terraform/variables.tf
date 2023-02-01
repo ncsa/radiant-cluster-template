@@ -59,6 +59,12 @@ variable "openstack_zone" {
   default     = "nova"
 }
 
+variable "openstack_security_kubernetes" {
+  type        = string
+  description = "IP address to allow connections to kube api port"
+  default     = "141.142.0.0/16"
+}
+
 # ----------------------------------------------------------------------
 # KUBERNETES NODES
 # ----------------------------------------------------------------------
@@ -198,7 +204,7 @@ variable "argocd_kube_id" {
 # APPLICATIONS (some rancher, some argocd)
 # ----------------------------------------------------------------------
 
-variable "rancher_monitoring_enabled" {
+variable "monitoring_enabled" {
   type        = bool
   description = "Enable monitoring in rancher"
   default     = true
@@ -266,13 +272,6 @@ variable "floating_ip" {
 
 # ----------------------------------------------------------------------
 # INGRESS
-# working:
-# - traefik1
-# - traefik2
-# - none
-# work in progress
-# - nginx
-# - nginxinc
 # ----------------------------------------------------------------------
 
 variable "ingress_controller_enabled" {
@@ -283,45 +282,21 @@ variable "ingress_controller_enabled" {
 
 variable "ingress_controller" {
   type        = string
-  description = "Desired ingress controller (traefik1, traefik2, nginxinc, nginx, none)"
-  default     = "traefik2"
-}
-
-variable "ingress_storageclass" {
-  type        = string
-  description = "storageclass used by ingress controller"
-  default     = "nfs-taiga"
+  description = "Desired ingress controller (traefik, traefik2 (same as traefik), nginx, none)"
+  default     = "traefik"
 }
 
 # ----------------------------------------------------------------------
 # TRAEFIK
 # ----------------------------------------------------------------------
 
-variable "traefik_dashboard" {
-  type        = bool
-  description = "Should dashboard ingress rule be added as /traefik"
-  default     = true
-}
-
-variable "traefik_server" {
+variable "traefik_storageclass" {
   type        = string
-  description = "Desired hostname to be used for cluster, nip.io will use ip address"
-  default     = ""
+  description = "storageclass used by ingress controller"
+  default     = "nfs-taiga"
 }
 
-variable "traefik_access_log" {
-  type        = bool
-  description = "Should traefik enable access logs"
-  default     = false
-}
-
-variable "traefik_use_certmanager" {
-  type        = bool
-  description = "Should traefik v2 use cert manager"
-  default     = false
-}
-
-variable "traefik2_ports" {
+variable "traefik_ports" {
   type        = map(any)
   description = "Additional ports to add to traefik"
   default     = {}
