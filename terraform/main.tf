@@ -19,10 +19,11 @@ module "cluster" {
   member_users  = var.member_users
   member_groups = var.member_groups
 
-  openstack_url               = var.openstack_url
-  openstack_credential_id     = var.openstack_credential_id
-  openstack_credential_secret = var.openstack_credential_secret
-  openstack_zone              = var.openstack_zone
+  openstack_url                 = var.openstack_url
+  openstack_credential_id       = var.openstack_credential_id
+  openstack_credential_secret   = var.openstack_credential_secret
+  openstack_zone                = var.openstack_zone
+  openstack_security_kubernetes = var.openstack_security_kubernetes
   #public_key                   = use default in module
 
   old_hostnames = var.old_hostnames
@@ -51,11 +52,10 @@ module "argocd" {
   cluster_kube_id = module.cluster.kube_id
   floating_ip     = module.cluster.floating_ip
 
-  openstack_url                 = var.openstack_url
-  openstack_credential_id       = var.openstack_credential_id
-  openstack_credential_secret   = var.openstack_credential_secret
-  openstack_project             = module.cluster.project_name
-  openstack_security_kubernetes = var.openstack_security_kubernetes
+  openstack_url               = var.openstack_url
+  openstack_credential_id     = var.openstack_credential_id
+  openstack_credential_secret = var.openstack_credential_secret
+  openstack_project           = module.cluster.project_name
 
   rancher_url   = var.rancher_url
   rancher_token = var.rancher_token
