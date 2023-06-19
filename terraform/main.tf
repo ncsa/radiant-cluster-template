@@ -3,7 +3,8 @@ locals {
 }
 
 module "cluster" {
-  source = "github.com/ncsa/radiant-cluster/terraform/modules/rke1"
+  source  = "git.ncsa.illinois.edu/kubernetes/rke1/radiant"
+  version = ">= 1.0.0, < 2.0.0"
 
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
@@ -46,7 +47,8 @@ module "cluster" {
 }
 
 module "argocd" {
-  source = "github.com/ncsa/radiant-cluster/terraform/modules/argocd"
+  source  = "git.ncsa.illinois.edu/kubernetes/argocd/radiant"
+  version = ">= 1.0.0, < 2.0.0"
 
   cluster_name    = var.cluster_name
   cluster_kube_id = module.cluster.kube_id
