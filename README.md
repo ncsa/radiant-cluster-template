@@ -1,3 +1,5 @@
+This is mirrored to GitHub, the code can be found at: https://git.ncsa.illinois.edu/kubernetes/radiant-cluster-template
+
 This is a template to get you started setting up a cluster in radiant at NCSA
 
 # Git Setup
