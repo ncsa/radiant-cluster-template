@@ -62,7 +62,7 @@ variable "openstack_zone" {
 variable "openstack_security_kubernetes" {
   type        = string
   description = "IP address to allow connections to kube api port"
-  default     = "141.142.0.0/16"
+  default     = "141.142.217.171/32"
 }
 
 # ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ variable "openstack_security_kubernetes" {
 variable "rke1_version" {
   type        = string
   description = "Version of rke1 to install."
-  default     = "v1.21.14-rancher1-1"
+  default     = "v1.24.13-rancher2-1"
 }
 
 variable "old_hostnames" {
