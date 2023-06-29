@@ -1,8 +1,6 @@
 #cluster_name                  = "PICK ONE"
 
 # KUBERNETES
-#worker_flavor                 = "gp.large"
-#worker_count                  = 3 
 #admin_users                   = [ "" ]
 
 # OPENSTACK

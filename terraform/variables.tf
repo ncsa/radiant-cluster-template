@@ -53,69 +53,10 @@ variable "openstack_external_net" {
   default     = "ext-net"
 }
 
-variable "openstack_zone" {
-  type        = string
-  description = "default zone to use for openstack nodes"
-  default     = "nova"
-}
-
 variable "openstack_security_kubernetes" {
   type        = string
   description = "IP address to allow connections to kube api port"
   default     = "141.142.217.171/32"
-}
-
-# ----------------------------------------------------------------------
-# KUBERNETES NODES
-# ----------------------------------------------------------------------
-
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
-variable "rke1_version" {
-  type        = string
-  description = "Version of rke1 to install."
-  default     = "v1.24.13-rancher2-1"
-}
-
-variable "old_hostnames" {
-  type        = bool
-  description = "should old hostname be used (base 0)"
-  default     = false
-}
-
-variable "controlplane_count" {
-  type        = string
-  description = "Desired quantity of control-plane nodes"
-  default     = 3
-}
-
-variable "controlplane_flavor" {
-  type        = string
-  description = "Desired flavor of control-plane nodes"
-  default     = "gp.medium"
-}
-
-variable "controlplane_disksize" {
-  type        = string
-  description = "Desired disksize of control-plane nodes"
-  default     = 40
-}
-
-variable "worker_count" {
-  type        = string
-  description = "Desired quantity of worker nodes"
-  default     = 3
-}
-
-variable "worker_flavor" {
-  type        = string
-  description = "Desired flavor of worker nodes"
-  default     = "gp.large"
-}
-
-variable "worker_disksize" {
-  type        = string
-  description = "Desired disksize of worker nodes"
-  default     = 40
 }
 
 # ----------------------------------------------------------------------
@@ -133,16 +74,16 @@ variable "rancher_token" {
   description = "Access token for rancher, clusters are created as this user"
 }
 
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+variable "rke1_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = "v1.24.13-rancher2-1"
+}
+
 # ----------------------------------------------------------------------
 # USERS
 # ----------------------------------------------------------------------
-
-variable "admin_radiant" {
-  type        = bool
-  description = "Should users that have access to radiant be an admin"
-  default     = false
-}
-
 variable "admin_users" {
   type        = set(string)
   description = "List of all users that have admin rights in argocd and the cluster"

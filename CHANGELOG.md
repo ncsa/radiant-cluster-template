@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0 - 2023-06-28
+
+This is based on radiant-cluster version 2. This changes the way cluster is defined and now uses a json file to define the cluster. This will allow you to have different types of worker nodes:
+
+```json
+{
+  "machines": [
+    {
+      "name": "controlplane",
+      "role": "controlplane",
+      "count": 3,
+      "flavor": "gp.medium",
+      "os": "ubuntu"
+    },
+    {
+      "name": "worker",
+      "count": 3,
+      "flavor": "gp.large",
+      "disk": 40,
+      "os": "ubuntu"
+    }
+  ]
+}
+```
+
+### Changed
+
+- radiant users are no longer added as admins
+- all openstack variables have been removed
 
 ## 1.0.2 - 2023-01-31
 
