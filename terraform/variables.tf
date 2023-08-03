@@ -19,6 +19,7 @@ variable "write_ssh_files" {
   default     = false
 }
 
+# DEPRECATED
 variable "write_kubeconfig_files" {
   type        = bool
   description = "Write out the kubeconfig for devops user"
@@ -53,10 +54,71 @@ variable "openstack_external_net" {
   default     = "ext-net"
 }
 
-variable "openstack_security_kubernetes" {
+# DEPRECATED
+variable "openstack_zone" {
   type        = string
-  description = "IP address to allow connections to kube api port"
-  default     = "141.142.217.171/32"
+  description = "default zone to use for openstack nodes"
+  default     = "nova"
+}
+
+# ----------------------------------------------------------------------
+# KUBERNETES NODES
+# ----------------------------------------------------------------------
+
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+variable "rke1_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = "v1.24.13-rancher2-1"
+}
+
+# DEPRECATED
+variable "old_hostnames" {
+  type        = bool
+  description = "should old hostname be used (base 0)"
+  default     = false
+}
+
+# DEPRECATED
+variable "controlplane_count" {
+  type        = string
+  description = "Desired quantity of control-plane nodes"
+  default     = 3
+}
+
+# DEPRECATED
+variable "controlplane_flavor" {
+  type        = string
+  description = "Desired flavor of control-plane nodes"
+  default     = "gp.medium"
+}
+
+# DEPRECATED
+variable "controlplane_disksize" {
+  type        = string
+  description = "Desired disksize of control-plane nodes"
+  default     = 40
+}
+
+# DEPRECATED
+variable "worker_count" {
+  type        = string
+  description = "Desired quantity of worker nodes"
+  default     = 3
+}
+
+# DEPRECATED
+variable "worker_flavor" {
+  type        = string
+  description = "Desired flavor of worker nodes"
+  default     = "gp.large"
+}
+
+# DEPRECATED
+variable "worker_disksize" {
+  type        = string
+  description = "Desired disksize of worker nodes"
+  default     = 40
 }
 
 # ----------------------------------------------------------------------
@@ -74,16 +136,17 @@ variable "rancher_token" {
   description = "Access token for rancher, clusters are created as this user"
 }
 
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
-variable "rke1_version" {
-  type        = string
-  description = "Version of rke1 to install."
-  default     = "v1.24.13-rancher2-1"
-}
-
 # ----------------------------------------------------------------------
 # USERS
 # ----------------------------------------------------------------------
+
+# DEPRECATED
+variable "admin_radiant" {
+  type        = bool
+  description = "Should users that have access to radiant be an admin"
+  default     = false
+}
+
 variable "admin_users" {
   type        = set(string)
   description = "List of all users that have admin rights in argocd and the cluster"
@@ -157,6 +220,7 @@ variable "cinder_enabled" {
   default     = false
 }
 
+# will change to false in future version
 variable "longhorn_enabled" {
   type        = bool
   description = "Enable longhorn storage"
@@ -175,6 +239,7 @@ variable "nfs_enabled" {
   default     = true
 }
 
+# will change to false in future version
 variable "healthmonitor_enabled" {
   type        = bool
   description = "Enable healthmonitor"

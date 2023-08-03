@@ -13,3 +13,12 @@ resource "local_file" "ssh_config" {
   file_permission      = "0600"
   content              = module.cluster.ssh_config
 }
+
+# DEPRECATED
+resource "local_file" "kubeconfig" {
+  count                = var.write_kubeconfig_files ? 1 : 0
+  filename             = pathexpand("~/.kube/${var.cluster_name}.kubeconfig")
+  directory_permission = "0700"
+  file_permission      = "0600"
+  content              = module.cluster.kubeconfig
+}
