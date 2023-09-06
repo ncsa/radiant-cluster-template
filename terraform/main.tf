@@ -14,9 +14,11 @@ module "cluster" {
   cluster_description = var.cluster_description
   cluster_machines    = local.machines
 
-  openstack_url               = var.openstack_url
-  openstack_credential_id     = var.openstack_credential_id
-  openstack_credential_secret = var.openstack_credential_secret
+  openstack_url                 = var.openstack_url
+  openstack_credential_id       = var.openstack_credential_id
+  openstack_credential_secret   = var.openstack_credential_secret
+  openstack_security_kubernetes = var.openstack_security_kubernetes
+  openstack_security_ssh        = var.openstack_security_ssh
 
   floating_ip = var.floating_ip
 

@@ -54,6 +54,24 @@ variable "openstack_external_net" {
   default     = "ext-net"
 }
 
+variable "openstack_security_kubernetes" {
+  type        = map(any)
+  description = "IP address to allow connections to kube api port, default is rancher nodes"
+  default = {
+    "rancher-1" : "141.142.218.167/32"
+    "rancher-2" : "141.142.217.171/32"
+    "rancher-3" : "141.142.217.184/32"
+  }
+}
+
+variable "openstack_security_ssh" {
+  type        = map(any)
+  description = "IP address to allow connections to ssh, default is open to the NCSA"
+  default = {
+    "ncsa" : "141.142.0.0/16"
+  }
+}
+
 # DEPRECATED
 variable "openstack_zone" {
   type        = string

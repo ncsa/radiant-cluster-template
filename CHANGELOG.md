@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.1 - 2023-09-06
+
+### Changed
+- Expose IP security group for kube api (defaults to rancher)
+- Expose IP security group for ssh (defaults to NCSA)
+
 ## 2.1.0 - 2023-08-03
 
 In the next major update all backwards compatible code will be removed. Please migrate to teh cluster_machine setup and set controlplane_count and worker_count to 0
