@@ -83,11 +83,11 @@ variable "openstack_zone" {
 # KUBERNETES NODES
 # ----------------------------------------------------------------------
 
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.8/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 variable "rke1_version" {
   type        = string
   description = "Version of rke1 to install."
-  default     = "v1.24.13-rancher2-1"
+  default     = "v1.27.8-rancher2-2"
 }
 
 # DEPRECATED
@@ -137,6 +137,28 @@ variable "worker_disksize" {
   type        = string
   description = "Desired disksize of worker nodes"
   default     = 40
+}
+
+# ----------------------------------------------------------------------
+# NODE CREATION OPTIONS
+# ----------------------------------------------------------------------
+
+variable "ncsa_security" {
+  type        = bool
+  description = "Install NCSA security options, for example rsyslog"
+  default     = false
+}
+
+variable "taiga_enabled" {
+  type        = bool
+  description = "Enable Taiga mount"
+  default     = true
+}
+
+variable "install_docker" {
+  type        = bool
+  description = "Install Docker when provisioning node"
+  default     = true
 }
 
 # ----------------------------------------------------------------------
@@ -219,12 +241,18 @@ variable "argocd_annotations" {
 variable "argocd_kube_id" {
   type        = string
   description = "Rancher kube id for argocd cluster"
-  default     = "c-p9m26"
+  default     = "c-ls9dp"
 }
 
 # ----------------------------------------------------------------------
 # APPLICATIONS (some rancher, some argocd)
 # ----------------------------------------------------------------------
+
+variable "argocd_app" {
+  type        = bool
+  description = "Deploy longhorn/monitoring using argocd"
+  default     = false
+}
 
 variable "monitoring_enabled" {
   type        = bool
