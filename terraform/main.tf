@@ -3,10 +3,10 @@ locals {
   machines    = local.cluster_def["machines"]
 
   ports = { for k, v in var.traefik_ports : k => {
-      "port_range_min": v.exposedPort,
-      "port_range_max": v.exposedPort,
-      "protocol": try(v.protocol, "TCP"),
-      "remote_ip_prefix": try(v.ipPrefix, "0.0.0.0/0"),
+    "port_range_min" : v.exposedPort,
+    "port_range_max" : v.exposedPort,
+    "protocol" : try(v.protocol, "TCP"),
+    "remote_ip_prefix" : try(v.ipPrefix, "0.0.0.0/0"),
   } if v.expose }
 }
 
