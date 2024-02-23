@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.0 - 2024-02-21
+
+Removed all deprecated code. Clusters should now be defined using cluster.json.
+
+### Changed
+- argocd_app is no longer used, all apps installed using argocd
+- add custom rules to firewall for ports opened in traefik
+- defaults changed for the following variables
+  - cinder is now enabled by default
+  - longhorn is now disabled by default
+  - healthmonitor is now disabled by default
+  - sealedsecrets is now enabled by default
+
+### Added
+- ability to set network. Default is weave to be compatible with previous version but this should be changed. Weave is EOL 12/31/2024
+  - canal (rancher default)
+  - calico
+  - flannel
+  - weave (deprecated)
+  - none
+
 ## 2.1.1 - 2023-09-06
 
 ### Changed

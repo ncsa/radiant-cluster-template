@@ -2,13 +2,18 @@ locals {
   cluster_def = jsondecode(file("cluster.json"))
   machines    = local.cluster_def["machines"]
 
-  # DEPRECATED
-  admin_groups = var.admin_radiant ? setunion(var.admin_groups, ["radiant_${module.cluster.project_name}"]) : var.admin_groups
+  ports = { for k, v in var.traefik_ports : k => {
+      "port_range_min": v.exposedPort,
+      "port_range_max": v.exposedPort,
+      "protocol": try(v.protocol, "TCP"),
+      "remote_ip_prefix": try(v.ipPrefix, "0.0.0.0/0"),
+  } if v.expose }
 }
+
 
 module "cluster" {
   source  = "git.ncsa.illinois.edu/kubernetes/rke1/radiant"
-  version = ">= 2.1.0, < 3.0.0"
+  version = ">= 3.0.0, < 4.0.0"
 
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
@@ -19,35 +24,23 @@ module "cluster" {
   openstack_credential_secret   = var.openstack_credential_secret
   openstack_security_kubernetes = var.openstack_security_kubernetes
   openstack_security_ssh        = var.openstack_security_ssh
+  openstack_security_custom     = merge(local.ports, var.openstack_security_custom)
+
+  ncsa_security  = var.ncsa_security
+  taiga_enabled  = var.taiga_enabled
+  install_docker = var.install_docker
 
   floating_ip = var.floating_ip
 
-  rancher_url   = var.rancher_url
-  rancher_token = var.rancher_token
-  rke1_version  = var.rke1_version
+  rancher_url    = var.rancher_url
+  rancher_token  = var.rancher_token
+  rke1_version   = var.rke1_version
+  network_plugin = var.network_plugin
 
   admin_users   = var.admin_users
-  admin_groups  = local.admin_groups
+  admin_groups  = var.admin_groups
   member_users  = var.member_users
   member_groups = var.member_groups
-
-  # DEPRECATED
-  monitoring_enabled = var.monitoring_enabled
-  longhorn_enabled   = var.longhorn_enabled
-  longhorn_replicas  = var.longhorn_replicas
-
-  # DEPRECATED
-  openstack_zone = var.openstack_zone
-  #public_key                   = use default in module
-  old_hostnames         = var.old_hostnames
-  controlplane_count    = var.controlplane_count
-  controlplane_flavor   = var.controlplane_flavor
-  controlplane_disksize = var.controlplane_disksize
-  worker_count          = var.worker_count
-  worker_flavor         = var.worker_flavor
-  worker_disksize       = var.worker_disksize
-
-
 
   #network_cidr                 = use default in module
   #dns_servers                  = use default in module
@@ -56,7 +49,7 @@ module "cluster" {
 
 module "argocd" {
   source  = "git.ncsa.illinois.edu/kubernetes/argocd/radiant"
-  version = ">= 2.1.0, < 3.0.0"
+  version = ">= 3.0.0, < 4.0.0"
 
   cluster_name    = var.cluster_name
   cluster_kube_id = module.cluster.kube_id
@@ -76,13 +69,10 @@ module "argocd" {
   argocd_sync         = var.argocd_sync
 
   admin_users   = var.admin_users
-  admin_groups  = local.admin_groups
+  admin_groups  = var.admin_groups
   member_users  = var.member_users
   member_groups = var.member_groups
 
-  # not managed by argocd but rancher
-  monitoring_enabled = false
-  longhorn_enabled   = false
 
   # ingress controller
   ingress_controller_enabled = var.ingress_controller_enabled
@@ -93,8 +83,10 @@ module "argocd" {
   acme_email                 = var.acme_email
 
   # storage classes
-  cinder_enabled = var.cinder_enabled
-  nfs_enabled    = var.nfs_enabled
+  cinder_enabled    = var.cinder_enabled
+  nfs_enabled       = var.nfs_enabled
+  longhorn_enabled  = var.longhorn_enabled
+  longhorn_replicas = var.longhorn_replicas
 
   # load balancer
   metallb_enabled = var.metallb_enabled
@@ -103,6 +95,7 @@ module "argocd" {
   sealedsecrets_enabled = var.sealedsecrets_enabled
 
   # monitoring services
+  monitoring_enabled    = var.monitoring_enabled
   healthmonitor_enabled = var.healthmonitor_enabled
   healthmonitor_nfs     = var.healthmonitor_nfs
   healthmonitor_secrets = var.healthmonitor_secrets

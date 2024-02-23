@@ -19,13 +19,6 @@ variable "write_ssh_files" {
   default     = false
 }
 
-# DEPRECATED
-variable "write_kubeconfig_files" {
-  type        = bool
-  description = "Write out the kubeconfig for devops user"
-  default     = false
-}
-
 # ----------------------------------------------------------------------
 # OPENSTACK
 # ----------------------------------------------------------------------
@@ -72,71 +65,11 @@ variable "openstack_security_ssh" {
   }
 }
 
-# DEPRECATED
-variable "openstack_zone" {
-  type        = string
-  description = "default zone to use for openstack nodes"
-  default     = "nova"
-}
-
-# ----------------------------------------------------------------------
-# KUBERNETES NODES
-# ----------------------------------------------------------------------
-
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.8/data.json | jq -r '.K8sVersionRKESystemImages | keys'
-variable "rke1_version" {
-  type        = string
-  description = "Version of rke1 to install."
-  default     = "v1.27.8-rancher2-2"
-}
-
-# DEPRECATED
-variable "old_hostnames" {
-  type        = bool
-  description = "should old hostname be used (base 0)"
-  default     = false
-}
-
-# DEPRECATED
-variable "controlplane_count" {
-  type        = string
-  description = "Desired quantity of control-plane nodes"
-  default     = 3
-}
-
-# DEPRECATED
-variable "controlplane_flavor" {
-  type        = string
-  description = "Desired flavor of control-plane nodes"
-  default     = "gp.medium"
-}
-
-# DEPRECATED
-variable "controlplane_disksize" {
-  type        = string
-  description = "Desired disksize of control-plane nodes"
-  default     = 40
-}
-
-# DEPRECATED
-variable "worker_count" {
-  type        = string
-  description = "Desired quantity of worker nodes"
-  default     = 3
-}
-
-# DEPRECATED
-variable "worker_flavor" {
-  type        = string
-  description = "Desired flavor of worker nodes"
-  default     = "gp.large"
-}
-
-# DEPRECATED
-variable "worker_disksize" {
-  type        = string
-  description = "Desired disksize of worker nodes"
-  default     = 40
+variable "openstack_security_custom" {
+  type        = map(any)
+  description = "ports to open for custom services to the world, assumed these are blocked in other ways"
+  default = {
+  }
 }
 
 # ----------------------------------------------------------------------
@@ -176,16 +109,22 @@ variable "rancher_token" {
   description = "Access token for rancher, clusters are created as this user"
 }
 
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.8/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+variable "rke1_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = "v1.27.8-rancher2-2"
+}
+
+variable "network_plugin" {
+  type        = string
+  description = "Network plugin to be used"
+  default     = "weave"
+}
+
 # ----------------------------------------------------------------------
 # USERS
 # ----------------------------------------------------------------------
-
-# DEPRECATED
-variable "admin_radiant" {
-  type        = bool
-  description = "Should users that have access to radiant be an admin"
-  default     = false
-}
 
 variable "admin_users" {
   type        = set(string)
@@ -245,14 +184,8 @@ variable "argocd_kube_id" {
 }
 
 # ----------------------------------------------------------------------
-# APPLICATIONS (some rancher, some argocd)
+# APPLICATIONS
 # ----------------------------------------------------------------------
-
-variable "argocd_app" {
-  type        = bool
-  description = "Deploy longhorn/monitoring using argocd"
-  default     = false
-}
 
 variable "monitoring_enabled" {
   type        = bool
@@ -263,14 +196,14 @@ variable "monitoring_enabled" {
 variable "cinder_enabled" {
   type        = bool
   description = "Enable cinder storage"
-  default     = false
+  default     = true
 }
 
 # will change to false in future version
 variable "longhorn_enabled" {
   type        = bool
   description = "Enable longhorn storage"
-  default     = true
+  default     = false
 }
 
 variable "longhorn_replicas" {
@@ -289,7 +222,7 @@ variable "nfs_enabled" {
 variable "healthmonitor_enabled" {
   type        = bool
   description = "Enable healthmonitor"
-  default     = true
+  default     = false
 }
 
 variable "healthmonitor_nfs" {
@@ -307,7 +240,7 @@ variable "healthmonitor_secrets" {
 variable "sealedsecrets_enabled" {
   type        = bool
   description = "Enable sealed secrets"
-  default     = false
+  default     = true
 }
 
 variable "metallb_enabled" {
