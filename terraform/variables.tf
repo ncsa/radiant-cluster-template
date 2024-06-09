@@ -29,6 +29,12 @@ variable "openstack_url" {
   default     = "https://radiant.ncsa.illinois.edu:5000/v3/"
 }
 
+variable "openstack_region_name" {
+  type        = string
+  description = "OpenStack region name"
+  default     = "RegionOne"
+}
+
 variable "openstack_credential_id" {
   type        = string
   sensitive   = true
@@ -70,6 +76,27 @@ variable "openstack_security_custom" {
   description = "ports to open for custom services to the world, assumed these are blocked in other ways"
   default = {
   }
+}
+
+variable "openstack_os_image" {
+  type        = map(any)
+  description = "Map from short OS name to image"
+  default = {
+    "ubuntu" = {
+      "imagename" : "Featured-Ubuntu22"
+      "username" : "ubuntu"
+    }
+    "ubuntu22" = {
+      "imagename" : "Featured-Ubuntu22"
+      "username" : "ubuntu"
+    }
+  }
+}
+
+variable "dns_servers" {
+  type        = set(string)
+  description = "DNS Servers"
+  default     = ["141.142.2.2", "141.142.230.144"]
 }
 
 # ----------------------------------------------------------------------
@@ -199,7 +226,24 @@ variable "cinder_enabled" {
   default     = true
 }
 
-# will change to false in future version
+variable "manila_nfs_enabled" {
+  type        = bool
+  description = "Enable manila nfs storage"
+  default     = false
+}
+
+variable "manila_cephfs_enabled" {
+  type        = bool
+  description = "Enable manila cephfs storage"
+  default     = false
+}
+
+variable "manila_cephfs_type" {
+  type        = string
+  description = "Manila cephfs type"
+  default     = "default"
+}
+
 variable "longhorn_enabled" {
   type        = bool
   description = "Enable longhorn storage"
@@ -218,7 +262,6 @@ variable "nfs_enabled" {
   default     = true
 }
 
-# will change to false in future version
 variable "healthmonitor_enabled" {
   type        = bool
   description = "Enable healthmonitor"

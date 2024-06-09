@@ -13,19 +13,24 @@ locals {
 
 module "cluster" {
   source  = "git.ncsa.illinois.edu/kubernetes/rke1/radiant"
-  version = ">= 3.0.0, < 4.0.0"
+  version = ">= 3.1.0, < 4.0.0"
 
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
   cluster_machines    = local.machines
 
   openstack_url                 = var.openstack_url
+  openstack_region_name         = var.openstack_region_name
   openstack_credential_id       = var.openstack_credential_id
   openstack_credential_secret   = var.openstack_credential_secret
   openstack_security_kubernetes = var.openstack_security_kubernetes
   openstack_security_ssh        = var.openstack_security_ssh
   openstack_security_custom     = merge(local.ports, var.openstack_security_custom)
 
+  openstack_external_net = var.openstack_external_net
+  openstack_os_image     = var.openstack_os_image
+
+  dns_servers    = var.dns_servers
   ncsa_security  = var.ncsa_security
   taiga_enabled  = var.taiga_enabled
   install_docker = var.install_docker
@@ -49,13 +54,14 @@ module "cluster" {
 
 module "argocd" {
   source  = "git.ncsa.illinois.edu/kubernetes/argocd/radiant"
-  version = ">= 3.0.0, < 4.0.0"
+  version = ">= 3.1.0, < 4.0.0"
 
   cluster_name    = var.cluster_name
   cluster_kube_id = module.cluster.kube_id
   floating_ip     = module.cluster.floating_ip
 
   openstack_url               = var.openstack_url
+  openstack_region_name       = var.openstack_region_name
   openstack_credential_id     = var.openstack_credential_id
   openstack_credential_secret = var.openstack_credential_secret
   openstack_project           = module.cluster.project_name
@@ -83,10 +89,13 @@ module "argocd" {
   acme_email                 = var.acme_email
 
   # storage classes
-  cinder_enabled    = var.cinder_enabled
-  nfs_enabled       = var.nfs_enabled
-  longhorn_enabled  = var.longhorn_enabled
-  longhorn_replicas = var.longhorn_replicas
+  cinder_enabled        = var.cinder_enabled
+  manila_nfs_enabled    = var.manila_nfs_enabled
+  manila_cephfs_enabled = var.manila_cephfs_enabled
+  manila_cephfs_type    = var.manila_cephfs_type
+  nfs_enabled           = var.nfs_enabled
+  longhorn_enabled      = var.longhorn_enabled
+  longhorn_replicas     = var.longhorn_replicas
 
   # load balancer
   metallb_enabled = var.metallb_enabled
