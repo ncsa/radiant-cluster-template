@@ -57,9 +57,7 @@ variable "openstack_security_kubernetes" {
   type        = map(any)
   description = "IP address to allow connections to kube api port, default is rancher nodes"
   default = {
-    "rancher-1" : "141.142.218.167/32"
-    "rancher-2" : "141.142.217.171/32"
-    "rancher-3" : "141.142.217.184/32"
+    "rancher" : "141.142.217.235/32"
   }
 }
 
@@ -82,15 +80,21 @@ variable "openstack_os_image" {
   type        = map(any)
   description = "Map from short OS name to image"
   default = {
-    "ubuntu" = {
-      "imagename" : "Featured-Ubuntu22"
+    "ubuntu22" = {
+      "imagename" : "Ubuntu 22.04"
       "username" : "ubuntu"
     }
-    "ubuntu22" = {
-      "imagename" : "Featured-Ubuntu22"
+    "ubuntu24" = {
+      "imagename" : "Ubuntu 24.04"
       "username" : "ubuntu"
     }
   }
+}
+
+variable "openstack_ssh_key" {
+  type        = string
+  description = "OpenStack SSH key name, leave blank to generate new key"
+  default     = ""
 }
 
 variable "dns_servers" {
@@ -136,11 +140,22 @@ variable "rancher_token" {
   description = "Access token for rancher, clusters are created as this user"
 }
 
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.8/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+# NEW
+# RKE2
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.rke2.releases[].version'
+# K3S
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.k3s.releases[].version'
+variable "kubernetes_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = ""
+}
+
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 variable "rke1_version" {
   type        = string
   description = "Version of rke1 to install."
-  default     = "v1.27.8-rancher2-2"
+  default     = "v1.28.12-rancher1-1"
 }
 
 variable "network_plugin" {
@@ -208,6 +223,19 @@ variable "argocd_kube_id" {
   type        = string
   description = "Rancher kube id for argocd cluster"
   default     = "c-ls9dp"
+}
+
+variable "argocd_kubernetes_url" {
+  type        = string
+  description = "URL to kubernetes cluster (leave blank to use same as rancher)"
+  default     = ""
+}
+
+variable "argocd_kubernetes_token" {
+  type        = string
+  sensitive   = true
+  description = "Access token for kubernetes cluster"
+  default     = ""
 }
 
 # ----------------------------------------------------------------------

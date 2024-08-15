@@ -1,5 +1,5 @@
 resource "local_file" "ssh_private_key" {
-  count                = var.write_ssh_files ? 1 : 0
+  count                = var.openstack_ssh_key == "" && var.write_ssh_files ? 1 : 0
   filename             = pathexpand("~/.ssh/${var.cluster_name}.pem")
   directory_permission = "0700"
   file_permission      = "0600"

@@ -8,8 +8,10 @@ locals {
     "protocol" : try(v.protocol, "TCP"),
     "remote_ip_prefix" : try(v.ipPrefix, "0.0.0.0/0"),
   } if v.expose }
-}
 
+  argocd_url   = var.argocd_kubernetes_url == "" ? var.rancher_url : var.argocd_kubernetes_url
+  argocd_token = var.argocd_kubernetes_token == "" ? var.rancher_token : var.argocd_kubernetes_token
+}
 
 module "cluster" {
   source  = "git.ncsa.illinois.edu/kubernetes/rke1/radiant"
@@ -26,6 +28,7 @@ module "cluster" {
   openstack_security_kubernetes = var.openstack_security_kubernetes
   openstack_security_ssh        = var.openstack_security_ssh
   openstack_security_custom     = merge(local.ports, var.openstack_security_custom)
+  openstack_ssh_key             = var.openstack_ssh_key
 
   openstack_external_net = var.openstack_external_net
   openstack_os_image     = var.openstack_os_image
@@ -37,10 +40,11 @@ module "cluster" {
 
   floating_ip = var.floating_ip
 
-  rancher_url    = var.rancher_url
-  rancher_token  = var.rancher_token
-  rke1_version   = var.rke1_version
-  network_plugin = var.network_plugin
+  rancher_url        = var.rancher_url
+  rancher_token      = var.rancher_token
+  kubernetes_version = var.kubernetes_version
+  rke1_version       = var.rke1_version
+  network_plugin     = var.network_plugin
 
   admin_users   = var.admin_users
   admin_groups  = var.admin_groups
@@ -66,8 +70,8 @@ module "argocd" {
   openstack_credential_secret = var.openstack_credential_secret
   openstack_project           = module.cluster.project_name
 
-  rancher_url   = var.rancher_url
-  rancher_token = var.rancher_token
+  rancher_url   = local.argocd_url
+  rancher_token = local.argocd_token
 
   argocd_repo_version = var.argocd_repo_version
   argocd_kube_id      = var.argocd_enabled ? var.argocd_kube_id : ""
