@@ -84,10 +84,3 @@ Copy the [example](examples/gitlab-ci.yml) of the gitlab runner to .gitlab-ci.ym
 
 You can create a folder called arogcd and place the files to be applied to the argocd cluster. The pipeline will check during the `deploy` stage to see if the folder exists, and if it does, it applies the files to the argocd cluster. This is a convenient way to get [git repo](examples/gitrepo.yaml) defined (using sealed secrets off course) as well as the [root app](examples/apps.yaml) for the cluster.
 
-# Hints
-
-To get the versions for RKE1 you can run the following from the command line:
-
-```bash
-curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
-```

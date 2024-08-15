@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.2.0 - 2024-08-15
+
+Since the code can now creaet RKE2 and K3S clusters, the branch rke1 is no longer used and all code is merged into main.
+In version 4.0.0 I will remove the ability to create RKE1 clusters.
+
+## Added
+- Ability to now create RKE2/K3S clusters
+
 ## 3.1.0 - 2024-06-09
 
 This has now been tested with jetstream2 and should be able to create a cluster on jetstream2.

@@ -14,8 +14,8 @@ locals {
 }
 
 module "cluster" {
-  source  = "git.ncsa.illinois.edu/kubernetes/rke1/radiant"
-  version = ">= 3.1.0, < 4.0.0"
+  source  = "git.ncsa.illinois.edu/kubernetes/cluster/radiant"
+  version = ">= 3.2.0, < 4.0.0"
 
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
@@ -58,7 +58,7 @@ module "cluster" {
 
 module "argocd" {
   source  = "git.ncsa.illinois.edu/kubernetes/argocd/radiant"
-  version = ">= 3.1.0, < 4.0.0"
+  version = ">= 3.2.0, < 4.0.0"
 
   cluster_name    = var.cluster_name
   cluster_kube_id = module.cluster.kube_id
