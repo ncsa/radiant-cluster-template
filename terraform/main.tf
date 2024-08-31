@@ -2,11 +2,21 @@ locals {
   cluster_def = jsondecode(file("cluster.json"))
   machines    = local.cluster_def["machines"]
 
-  ports = { for k, v in var.traefik_ports : k => {
+  openstack_ports = { for k, v in var.traefik_ports : k => {
     "port_range_min" : v.exposedPort,
     "port_range_max" : v.exposedPort,
     "protocol" : try(v.protocol, "TCP"),
     "remote_ip_prefix" : try(v.ipPrefix, "0.0.0.0/0"),
+  } if v.expose }
+
+  traefik_ports = { for k, v in var.traefik_ports : k => {
+    "expose" : {
+      "default" : v.expose,
+    }
+    "exposedPort" : v.exposedPort,
+    "port" : v.port,
+    "protocol" : try(v.protocol, "TCP"),
+    "ipPrefix" : try(v.ipPrefix, "0.0.0.0/0"),
   } if v.expose }
 
   argocd_url   = var.argocd_kubernetes_url == "" ? var.rancher_url : var.argocd_kubernetes_url
@@ -27,7 +37,7 @@ module "cluster" {
   openstack_credential_secret   = var.openstack_credential_secret
   openstack_security_kubernetes = var.openstack_security_kubernetes
   openstack_security_ssh        = var.openstack_security_ssh
-  openstack_security_custom     = merge(local.ports, var.openstack_security_custom)
+  openstack_security_custom     = merge(local.openstack_ports, var.openstack_security_custom)
   openstack_ssh_key             = var.openstack_ssh_key
 
   openstack_external_net = var.openstack_external_net
@@ -88,7 +98,7 @@ module "argocd" {
   ingress_controller_enabled = var.ingress_controller_enabled
   ingress_controller         = var.ingress_controller
   traefik_storageclass       = var.traefik_storageclass
-  traefik_ports              = var.traefik_ports
+  traefik_ports              = local.traefik_ports
   acme_staging               = var.acme_staging
   acme_email                 = var.acme_email
 

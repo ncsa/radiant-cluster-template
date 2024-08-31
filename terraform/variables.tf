@@ -57,7 +57,9 @@ variable "openstack_security_kubernetes" {
   type        = map(any)
   description = "IP address to allow connections to kube api port, default is rancher nodes"
   default = {
-    "rancher" : "141.142.217.235/32"
+    "rancher-01" : "141.142.219.189/32"
+    "rancher-02" : "141.142.216.186/32"
+    "rancher-03" : "141.142.218.118/32"
   }
 }
 
@@ -80,6 +82,10 @@ variable "openstack_os_image" {
   type        = map(any)
   description = "Map from short OS name to image"
   default = {
+    "ubuntu" = {
+      "imagename" : "Ubuntu 22.04"
+      "username" : "ubuntu"
+    }
     "ubuntu22" = {
       "imagename" : "Ubuntu 22.04"
       "username" : "ubuntu"

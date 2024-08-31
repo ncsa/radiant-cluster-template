@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.2.1 - 2024-08-30
+
+## Fixed
+- IP address for rancher changed
+- traefik expose parameter changed
+
 ## 3.2.0 - 2024-08-15
 
 Since the code can now creaet RKE2 and K3S clusters, the branch rke1 is no longer used and all code is merged into main.
