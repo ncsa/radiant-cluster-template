@@ -4,6 +4,11 @@ output "private_key_ssh" {
   value       = module.cluster.private_key_ssh
 }
 
+output "key_name" {
+  description = "SSH key"
+  value       = module.cluster.key_name
+}
+
 output "ssh_config" {
   description = "SSH Configuration, can be used to ssh into cluster"
   sensitive   = true
@@ -17,7 +22,7 @@ output "kubeconfig" {
 }
 
 output "kube_id" {
-  description = "OpenStack project name"
+  description = "ID of rancher cluster"
   value       = module.cluster.kube_id
 }
 

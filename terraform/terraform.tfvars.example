@@ -1,0 +1,36 @@
+# cluster_name                  = "PICK ONE"
+
+# OPENSTACK
+# floating_ip       = 2
+# ncsa_security     = false
+# taiga_enabled     = true
+# openstack_ssh_key = "radiant"
+
+# KUBERNETES
+# rke1_version   = "v1.28.10-rancher1-1"
+# network_plugin = "canal"
+
+# RANCHER
+# admin_users  = []
+# admin_groups = []
+
+# SECRETS plae in secrets.auto.tfvars
+# openstack_credential_id     = "GET THIS FROM OPENSTACK"
+# openstack_credential_secret = "GET THIS FROM OPENSTACK"
+# rancher_token               = "GET THIS FROM RANCHER"
+
+# ARGOCD
+# argocd_enabled = true
+# argocd_sync    = true
+
+# APPLICATIONS
+# cinder_enabled             = true
+# healthmonitor_enabled      = false
+# ingress_controller         = "traefik"
+# ingress_controller_enabled = true
+# longhorn_enabled           = false
+# metallb_enabled            = true
+# monitoring_enabled         = true
+# nfs_enabled                = true
+# sealedsecrets_enabled      = true
+# traefik_storageclass       = "nfs-taiga"

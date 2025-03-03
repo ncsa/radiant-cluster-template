@@ -19,12 +19,6 @@ variable "write_ssh_files" {
   default     = false
 }
 
-variable "write_kubeconfig_files" {
-  type        = bool
-  description = "Write out the kubeconfig for devops user"
-  default     = false
-}
-
 # ----------------------------------------------------------------------
 # OPENSTACK
 # ----------------------------------------------------------------------
@@ -33,6 +27,12 @@ variable "openstack_url" {
   type        = string
   description = "OpenStack URL"
   default     = "https://radiant.ncsa.illinois.edu:5000/v3/"
+}
+
+variable "openstack_region_name" {
+  type        = string
+  description = "OpenStack region name"
+  default     = "RegionOne"
 }
 
 variable "openstack_credential_id" {
@@ -53,57 +53,82 @@ variable "openstack_external_net" {
   default     = "ext-net"
 }
 
-# ----------------------------------------------------------------------
-# KUBERNETES NODES
-# ----------------------------------------------------------------------
-
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.6/data.json | jq -r '.K8sVersionRKESystemImages | keys'
-variable "rke1_version" {
-  type        = string
-  description = "Version of rke1 to install."
-  default     = "v1.21.14-rancher1-1"
+variable "openstack_security_kubernetes" {
+  type        = map(any)
+  description = "IP address to allow connections to kube api port, default is rancher nodes"
+  default = {
+    "rancher-01" : "141.142.219.189/32"
+    "rancher-02" : "141.142.216.186/32"
+    "rancher-03" : "141.142.218.118/32"
+  }
 }
 
-variable "old_hostnames" {
+variable "openstack_security_ssh" {
+  type        = map(any)
+  description = "IP address to allow connections to ssh, default is open to the NCSA"
+  default = {
+    "ncsa" : "141.142.0.0/16"
+  }
+}
+
+variable "openstack_security_custom" {
+  type        = map(any)
+  description = "ports to open for custom services to the world, assumed these are blocked in other ways"
+  default = {
+  }
+}
+
+variable "openstack_os_image" {
+  type        = map(any)
+  description = "Map from short OS name to image"
+  default = {
+    "ubuntu" = {
+      "imagename" : "Ubuntu 22.04"
+      "username" : "ubuntu"
+    }
+    "ubuntu22" = {
+      "imagename" : "Ubuntu 22.04"
+      "username" : "ubuntu"
+    }
+    "ubuntu24" = {
+      "imagename" : "Ubuntu 24.04"
+      "username" : "ubuntu"
+    }
+  }
+}
+
+variable "openstack_ssh_key" {
+  type        = string
+  description = "OpenStack SSH key name, leave blank to generate new key"
+  default     = ""
+}
+
+variable "dns_servers" {
+  type        = set(string)
+  description = "DNS Servers"
+  default     = ["141.142.2.2", "141.142.230.144"]
+}
+
+# ----------------------------------------------------------------------
+# NODE CREATION OPTIONS
+# ----------------------------------------------------------------------
+
+variable "ncsa_security" {
   type        = bool
-  description = "should old hostname be used (base 0)"
+  description = "Install NCSA security options, for example rsyslog"
   default     = false
 }
 
-variable "controlplane_count" {
-  type        = string
-  description = "Desired quantity of control-plane nodes"
-  default     = 3
+variable "taiga_enabled" {
+  type        = bool
+  description = "Enable Taiga mount"
+  default     = true
 }
 
-variable "controlplane_flavor" {
-  type        = string
-  description = "Desired flavor of control-plane nodes"
-  default     = "m1.medium"
-}
-
-variable "controlplane_disksize" {
-  type        = string
-  description = "Desired disksize of control-plane nodes"
-  default     = 40
-}
-
-variable "worker_count" {
-  type        = string
-  description = "Desired quantity of worker nodes"
-  default     = 3
-}
-
-variable "worker_flavor" {
-  type        = string
-  description = "Desired flavor of worker nodes"
-  default     = "m1.large"
-}
-
-variable "worker_disksize" {
-  type        = string
-  description = "Desired disksize of worker nodes"
-  default     = 40
+variable "install_docker" {
+  type        = bool
+  description = "Install Docker when provisioning node"
+  default     = true
 }
 
 # ----------------------------------------------------------------------
@@ -121,53 +146,71 @@ variable "rancher_token" {
   description = "Access token for rancher, clusters are created as this user"
 }
 
+# NEW
+# RKE2
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.rke2.releases[].version'
+# K3S
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.k3s.releases[].version'
+variable "kubernetes_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = ""
+}
+
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+variable "rke1_version" {
+  type        = string
+  description = "Version of rke1 to install."
+  default     = "v1.28.12-rancher1-1"
+}
+
+variable "network_plugin" {
+  type        = string
+  description = "Network plugin to be used"
+  default     = "weave"
+}
+
 # ----------------------------------------------------------------------
 # USERS
 # ----------------------------------------------------------------------
 
-variable "admin_radiant" {
-  type        = bool
-  description = "Should users that have access to radiant be an admin"
-  default     = true
-}
-
 variable "admin_users" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all users that have admin rights in argocd and the cluster"
   default     = []
 }
 
 variable "admin_groups" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all groups that have admin rights in argocd and the cluster"
   default     = []
 }
 
 variable "member_users" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all users that have access rights in argocd and the cluster"
   default     = []
 }
 
 variable "member_groups" {
   type        = set(string)
-  description = "Should argocd be used for infrastructure"
+  description = "List of all groups that have access rights in argocd and the cluster"
   default     = []
 }
 
 # ----------------------------------------------------------------------
 # ARGOCD
 # ----------------------------------------------------------------------
-variable "argocd_master" {
-  type        = bool
-  description = "Is this the master argocd cluster, you most likely don't need to modify this value"
-  default     = false
-}
-
 variable "argocd_enabled" {
   type        = bool
   description = "Should argocd resources be created"
   default     = true
+}
+
+variable "argocd_repo_version" {
+  type        = string
+  description = "What version of the application to deploy"
+  default     = "HEAD"
 }
 
 variable "argocd_sync" {
@@ -185,11 +228,24 @@ variable "argocd_annotations" {
 variable "argocd_kube_id" {
   type        = string
   description = "Rancher kube id for argocd cluster"
-  default     = "c-p9m26"
+  default     = "c-ls9dp"
+}
+
+variable "argocd_kubernetes_url" {
+  type        = string
+  description = "URL to kubernetes cluster (leave blank to use same as rancher)"
+  default     = ""
+}
+
+variable "argocd_kubernetes_token" {
+  type        = string
+  sensitive   = true
+  description = "Access token for kubernetes cluster"
+  default     = ""
 }
 
 # ----------------------------------------------------------------------
-# APPLICATIONS (some rancher, some argocd)
+# APPLICATIONS
 # ----------------------------------------------------------------------
 
 variable "monitoring_enabled" {
@@ -201,13 +257,31 @@ variable "monitoring_enabled" {
 variable "cinder_enabled" {
   type        = bool
   description = "Enable cinder storage"
+  default     = true
+}
+
+variable "manila_nfs_enabled" {
+  type        = bool
+  description = "Enable manila nfs storage"
   default     = false
+}
+
+variable "manila_cephfs_enabled" {
+  type        = bool
+  description = "Enable manila cephfs storage"
+  default     = false
+}
+
+variable "manila_cephfs_type" {
+  type        = string
+  description = "Manila cephfs type"
+  default     = "default"
 }
 
 variable "longhorn_enabled" {
   type        = bool
   description = "Enable longhorn storage"
-  default     = true
+  default     = false
 }
 
 variable "longhorn_replicas" {
@@ -225,7 +299,7 @@ variable "nfs_enabled" {
 variable "healthmonitor_enabled" {
   type        = bool
   description = "Enable healthmonitor"
-  default     = true
+  default     = false
 }
 
 variable "healthmonitor_nfs" {
@@ -243,7 +317,7 @@ variable "healthmonitor_secrets" {
 variable "sealedsecrets_enabled" {
   type        = bool
   description = "Enable sealed secrets"
-  default     = false
+  default     = true
 }
 
 variable "metallb_enabled" {
@@ -252,15 +326,14 @@ variable "metallb_enabled" {
   default     = true
 }
 
+variable "floating_ip" {
+  type        = string
+  description = "Number of floating IPs for MetalLB"
+  default     = 2
+}
+
 # ----------------------------------------------------------------------
 # INGRESS
-# working:
-# - traefik1
-# - traefik2
-# - none
-# work in progress
-# - nginx
-# - nginxinc
 # ----------------------------------------------------------------------
 
 variable "ingress_controller_enabled" {
@@ -271,45 +344,21 @@ variable "ingress_controller_enabled" {
 
 variable "ingress_controller" {
   type        = string
-  description = "Desired ingress controller (traefik1, traefik2, nginxinc, nginx, none)"
-  default     = "traefik2"
-}
-
-variable "ingress_storageclass" {
-  type        = string
-  description = "storageclass used by ingress controller"
-  default     = "nfs-taiga"
+  description = "Desired ingress controller (traefik, traefik2 (same as traefik), nginx, none)"
+  default     = "traefik"
 }
 
 # ----------------------------------------------------------------------
 # TRAEFIK
 # ----------------------------------------------------------------------
 
-variable "traefik_dashboard" {
-  type        = bool
-  description = "Should dashboard ingress rule be added as /traefik"
-  default     = true
-}
-
-variable "traefik_server" {
+variable "traefik_storageclass" {
   type        = string
-  description = "Desired hostname to be used for cluster, nip.io will use ip address"
-  default     = ""
+  description = "storageclass used by ingress controller"
+  default     = "nfs-taiga"
 }
 
-variable "traefik_access_log" {
-  type        = bool
-  description = "Should traefik enable access logs"
-  default     = false
-}
-
-variable "traefik_use_certmanager" {
-  type        = bool
-  description = "Should traefik v2 use cert manager"
-  default     = false
-}
-
-variable "traefik2_ports" {
+variable "traefik_ports" {
   type        = map(any)
   description = "Additional ports to add to traefik"
   default     = {}

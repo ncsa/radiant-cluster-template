@@ -156,6 +156,8 @@ spec:
           value: "/rootfs/var"
         - name: "HOST_RUN"
           value: "/rootfs/run"
+        - name: "HOST_MOUNT_PREFIX"
+          value: "/rootfs"
         - name: CLUSTER
           valueFrom:
             secretKeyRef:
@@ -252,6 +254,8 @@ spec:
           value: "/rootfs/var"
         - name: "HOST_RUN"
           value: "/rootfs/run"
+        - name: "HOST_MOUNT_PREFIX"
+          value: "/rootfs"
         - name: CLUSTER
           valueFrom:
             secretKeyRef:

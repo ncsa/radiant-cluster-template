@@ -1,5 +1,5 @@
 resource "local_file" "ssh_private_key" {
-  count                = var.write_ssh_files ? 1 : 0
+  count                = var.openstack_ssh_key == "" && var.write_ssh_files ? 1 : 0
   filename             = pathexpand("~/.ssh/${var.cluster_name}.pem")
   directory_permission = "0700"
   file_permission      = "0600"
@@ -12,12 +12,4 @@ resource "local_file" "ssh_config" {
   directory_permission = "0700"
   file_permission      = "0600"
   content              = module.cluster.ssh_config
-}
-
-resource "local_file" "kubeconfig" {
-  count                = var.write_kubeconfig_files ? 1 : 0
-  filename             = pathexpand("~/.kube/${var.cluster_name}.kubeconfig")
-  directory_permission = "0700"
-  file_permission      = "0600"
-  content              = module.cluster.kubeconfig
 }
