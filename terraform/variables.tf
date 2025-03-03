@@ -148,16 +148,16 @@ variable "rancher_token" {
 
 # NEW
 # RKE2
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.rke2.releases[].version'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.10/data.json | jq -r '.rke2.releases[].version'
 # K3S
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.k3s.releases[].version'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.10/data.json | jq -r '.k3s.releases[].version'
 variable "kubernetes_version" {
   type        = string
   description = "Version of rke1 to install."
   default     = ""
 }
 
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.9/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.10/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 variable "rke1_version" {
   type        = string
   description = "Version of rke1 to install."
