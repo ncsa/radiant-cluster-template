@@ -25,7 +25,7 @@ locals {
 
 module "cluster" {
   source  = "git.ncsa.illinois.edu/kubernetes/cluster/radiant"
-  version = ">= 3.2.0, < 4.0.0"
+  version = ">= 3.3.0, < 4.0.0"
 
   cluster_name        = var.cluster_name
   cluster_description = var.cluster_description
