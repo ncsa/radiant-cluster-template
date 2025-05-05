@@ -19,6 +19,12 @@
 # openstack_credential_secret = "GET THIS FROM OPENSTACK"
 # rancher_token               = "GET THIS FROM RANCHER"
 
+# QUALYS
+# qualys_url           = ""
+# qualys_activation_id = ""
+# qualys_customer_id   = ""
+# qualys_server        = ""
+
 # ARGOCD
 # argocd_enabled = true
 # argocd_sync    = true

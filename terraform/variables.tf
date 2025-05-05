@@ -119,6 +119,30 @@ variable "ncsa_security" {
   default     = false
 }
 
+variable "qualys_url" {
+  type        = string
+  description = "When installing qualys-cloud-agent, the URL to download the agent from"
+  default     = ""
+}
+
+variable "qualys_activation_id" {
+  type        = string
+  description = "When installing qualys-cloud-agent, this is the activation id"
+  default     = ""
+}
+
+variable "qualys_customer_id" {
+  type        = string
+  description = "When installing qualys-cloud-agent, this is the customer id"
+  default     = ""
+}
+
+variable "qualys_server" {
+  type        = string
+  description = "When installing qualys-cloud-agent, this is the server to connect to"
+  default     = ""
+}
+
 variable "taiga_enabled" {
   type        = bool
   description = "Enable Taiga mount"
@@ -148,16 +172,16 @@ variable "rancher_token" {
 
 # NEW
 # RKE2
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.10/data.json | jq -r '.rke2.releases[].version'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.11/data.json | jq -r '.rke2.releases[].version'
 # K3S
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.10/data.json | jq -r '.k3s.releases[].version'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.11/data.json | jq -r '.k3s.releases[].version'
 variable "kubernetes_version" {
   type        = string
   description = "Version of rke1 to install."
   default     = ""
 }
 
-# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.10/data.json | jq -r '.K8sVersionRKESystemImages | keys'
+# curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.11/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 variable "rke1_version" {
   type        = string
   description = "Version of rke1 to install."
@@ -167,7 +191,7 @@ variable "rke1_version" {
 variable "network_plugin" {
   type        = string
   description = "Network plugin to be used"
-  default     = "weave"
+  default     = ""
 }
 
 # ----------------------------------------------------------------------

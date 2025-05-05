@@ -43,10 +43,14 @@ module "cluster" {
   openstack_external_net = var.openstack_external_net
   openstack_os_image     = var.openstack_os_image
 
-  dns_servers    = var.dns_servers
-  ncsa_security  = var.ncsa_security
-  taiga_enabled  = var.taiga_enabled
-  install_docker = var.install_docker
+  dns_servers          = var.dns_servers
+  ncsa_security        = var.ncsa_security
+  qualys_url           = var.qualys_url
+  qualys_server        = var.qualys_server
+  qualys_activation_id = var.qualys_activation_id
+  qualys_customer_id   = var.qualys_customer_id
+  taiga_enabled        = var.taiga_enabled
+  install_docker       = var.install_docker
 
   floating_ip = var.floating_ip
 
