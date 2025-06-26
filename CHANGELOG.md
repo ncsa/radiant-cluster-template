@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+- host/k8s security hardening with CIS Benchmark compliance
+
 ## 3.3.0 - 2025-05-04
 
 ## Added
@@ -70,7 +72,7 @@ In the next major update all backwards compatible code will be removed. Please m
 ### Changed
 - This add backwards compatibility to the stack, you still need ot define the cluster machines
 
-## 2.0.0 - 2023-06-28
+### 2.0.0 - 2023-06-28
 
 This is based on radiant-cluster version 2. This changes the way cluster is defined and now uses a json file to define the cluster. This will allow you to have different types of worker nodes:
 
