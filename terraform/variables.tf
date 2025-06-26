@@ -187,6 +187,13 @@ variable "kubernetes_version" {
   default     = ""
 }
 
+# There are two builtin Pod Security Admission Configuration Template (PSACT): rancher-privileged and rancher-restricted.
+variable "default_psa_template" {
+  type        = string
+  description = "RKE2/K3s cluster-wide default Pod Security Admission Configuration Template"
+  default     = ""
+}
+
 # curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.11/data.json | jq -r '.K8sVersionRKESystemImages | keys'
 variable "rke1_version" {
   type        = string
