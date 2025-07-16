@@ -88,7 +88,7 @@ In the next major update all backwards compatible code will be removed. Please m
 ### Changed
 - This add backwards compatibility to the stack, you still need ot define the cluster machines
 
-### 2.0.0 - 2023-06-28
+## 2.0.0 - 2023-06-28
 
 This is based on radiant-cluster version 2. This changes the way cluster is defined and now uses a json file to define the cluster. This will allow you to have different types of worker nodes:
 
