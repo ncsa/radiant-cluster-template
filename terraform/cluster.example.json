@@ -3,16 +3,27 @@
     {
       "name": "controlplane",
       "role": "controlplane",
-      "count": 3,
       "flavor": "gp.medium",
-      "os": "ubuntu"
+      "os": "ubuntu",
+      "count": 3
     },
     {
       "name": "worker",
-      "count": 3,
       "flavor": "gp.xlarge",
+      "os": "ubuntu",
       "disk": 80,
-      "os": "ubuntu"
+      "count": 2,
+      "labels": {
+        "hub.jupyter.org/node-purpose": "user",
+        "environment": "production"
+      }
+    },
+    {
+      "name": "worker",
+      "flavor": "m1.xlarge",
+      "os": "ubuntu",
+      "disk": 60,
+      "start_index": 3
     }
   ]
 }

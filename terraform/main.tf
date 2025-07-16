@@ -54,11 +54,13 @@ module "cluster" {
 
   floating_ip = var.floating_ip
 
-  rancher_url        = var.rancher_url
-  rancher_token      = var.rancher_token
-  kubernetes_version = var.kubernetes_version
-  rke1_version       = var.rke1_version
-  network_plugin     = var.network_plugin
+  rancher_url          = var.rancher_url
+  rancher_token        = var.rancher_token
+  kubernetes_version   = var.kubernetes_version
+  rke2_cis_hardening   = var.rke2_cis_hardening
+  default_psa_template = var.default_psa_template
+  rke1_version         = var.rke1_version
+  network_plugin       = var.network_plugin
 
   admin_users   = var.admin_users
   admin_groups  = var.admin_groups
