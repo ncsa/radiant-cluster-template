@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 3.5.0 - 2025-07-15
 
 ### Added
 - added option `rke2_cis_hardening` (default false) to install RKE2 security options for CIS Benchmark compliance
