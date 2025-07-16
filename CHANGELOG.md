@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.5.0 - 2025-07-15
+
+### Added
+- added option `rke2_cis_hardening` (default false) to install RKE2 security options for CIS Benchmark compliance
+  - add etcd user/group
+  - configure kernel params for CIS benchmark
+  - add option for RKE2 CIS profile if `rke2_cis_hardening` enabled
+- added option to define pod security admission (PSA) template
+
+### Changed
+- define machine labels as map(string), not array of key=value strings
+
+## 3.4.0 - 2025-05-05
+
+### Changed
+- changed the data structure in variables that holds the machine definition
+
 ## 3.3.0 - 2025-05-04
 
 ## Added
