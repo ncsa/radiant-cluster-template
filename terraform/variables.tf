@@ -113,9 +113,9 @@ variable "dns_servers" {
 # NODE CREATION OPTIONS
 # ----------------------------------------------------------------------
 
-variable "k8s_cis_hardening" {
+variable "rke2_cis_hardening" {
   type        = bool
-  description = "Install host-level and kubernetes-level security options for CIS Benchmark compliance"
+  description = "Install host-level and kubernetes-level RKE2 security options for CIS Benchmark compliance"
   default     = false
 }
 
@@ -176,6 +176,12 @@ variable "rancher_token" {
   description = "Access token for rancher, clusters are created as this user"
 }
 
+variable "cis_benchmark" {
+  type        = string
+  description = "CIS Benchmark RKE2 profile used to validate configuration"
+  default     = "cis"
+}
+
 # NEW
 # RKE2
 # curl -s https://releases.rancher.com/kontainer-driver-metadata/release-v2.11/data.json | jq -r '.rke2.releases[].version'
@@ -188,6 +194,7 @@ variable "kubernetes_version" {
 }
 
 # There are two builtin Pod Security Admission Configuration Template (PSACT): rancher-privileged and rancher-restricted.
+# Leaving this blank will result in no PSA for K3s/RKE1/RKE2 and "rancher-restricted" for RKE2 if rke2_cis_hardening = true
 variable "default_psa_template" {
   type        = string
   description = "RKE2/K3s cluster-wide default Pod Security Admission Configuration Template"
