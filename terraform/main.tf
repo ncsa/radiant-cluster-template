@@ -57,7 +57,7 @@ module "cluster" {
   rancher_url          = var.rancher_url
   rancher_token        = var.rancher_token
   kubernetes_version   = var.kubernetes_version
-  k8s_cis_hardening    = var.k8s_cis_hardening
+  rke2_cis_hardening   = var.rke2_cis_hardening
   default_psa_template = var.default_psa_template
   rke1_version         = var.rke1_version
   network_plugin       = var.network_plugin
