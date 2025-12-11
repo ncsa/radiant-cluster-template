@@ -16,6 +16,9 @@
       "labels": {
         "hub.jupyter.org/node-purpose": "user",
         "environment": "production"
+      },
+      "taints": {
+        "nvidia.com/gpu", "1:NoSchedule"
       }
     },
     {
