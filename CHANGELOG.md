@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 3.6.0 - 2026-03-01
 
 ### Added
 - can now taint a node in cluster.json
+- can now set nfs-type (default subdir, will change to csi soon)
 
 ## 3.5.0 - 2025-07-15
 

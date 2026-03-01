@@ -99,7 +99,6 @@ module "argocd" {
   member_users  = var.member_users
   member_groups = var.member_groups
 
-
   # ingress controller
   ingress_controller_enabled = var.ingress_controller_enabled
   ingress_controller         = var.ingress_controller
@@ -114,6 +113,7 @@ module "argocd" {
   manila_cephfs_enabled = var.manila_cephfs_enabled
   manila_cephfs_type    = var.manila_cephfs_type
   nfs_enabled           = var.nfs_enabled
+  nfs_type              = var.nfs_type
   longhorn_enabled      = var.longhorn_enabled
   longhorn_replicas     = var.longhorn_replicas
 
