@@ -272,7 +272,7 @@ variable "argocd_annotations" {
 variable "argocd_kube_id" {
   type        = string
   description = "Rancher kube id for argocd cluster"
-  default     = "c-ls9dp"
+  default     = "c-m-2kjx8vq6"
 }
 
 variable "argocd_kubernetes_url" {
